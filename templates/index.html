@@ -1,0 +1,27 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Django with Tailwind CSS</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'css/output.css' %}"
+      type="text/css"
+    />
+  </head>
+
+  <body class="font-sans flex h-screen items-center justify-center">
+    <h1 class="text-3xl font-bold underline text-blue-600">
+        Hello world!
+      </h1>
+      <p class="text-gray-700">
+        This is a sample page. It uses Tailwind CSS for styling.
+      </p>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Click me
+      </button>
+  </body>
+</html>
