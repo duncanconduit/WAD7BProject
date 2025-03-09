@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+    <html>
+        <head lang="en">
+            <title>
+                Rango -
+                {% block title_block %}
+                   Template title
+                {% endblock %}
+            </title>
+        </head>
+        <body>
+            <div>
+            {% block body_block %}
+                This is body_block's default content
+            {% endblock %}            
+            </div>
+            <div>
+            {% block sidebar_block %}
+            {% endblock %}
+            </div>                
+            <hr />
+            <div>
+                <ul>
+                    
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact_us' %}">contact us</a></li>
+                    <li><a href="{% url 'dashboard:index' %}">User page</a></li>
+                    <li><a href="{% url 'login' %}">login</a></li>
+                    <li><a href="{% url 'register' %}">register</a></li>
+                </ul>                    
+            </div>
+        </body>
+    </html>
