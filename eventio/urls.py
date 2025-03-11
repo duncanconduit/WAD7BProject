@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-#from .views import index
 from eventio import views
  
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('dashboard/', include('dashboard.urls')),
+    path('', include('dashboard.urls')),
+    path('meetings/', include('meetings.urls')),
+    path('accounts/', include('accounts.urls')),
     path('about/', views.about, name='about'),
     path('contact_us/', views.contact_us, name='contact_us'),
     path('login/', views.login, name='login'),
