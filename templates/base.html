@@ -2,7 +2,7 @@
     <html>
         <head lang="en">
             <title>
-                Rango -
+                eventio -
                 {% block title_block %}
                    Template title
                 {% endblock %}
@@ -21,12 +21,11 @@
             <hr />
             <div>
                 <ul>
-                    
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
                     <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact_us' %}">contact us</a></li>
+                    <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
                     <li><a href="{% url 'dashboard:index' %}">User page</a></li>
-                    <li><a href="{% url 'login' %}">login</a></li>
-                    <li><a href="{% url 'register' %}">register</a></li>
                 </ul>                    
             </div>
         </body>
