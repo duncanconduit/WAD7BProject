@@ -26,7 +26,7 @@ class Invitation(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='invitations')
     time_created = models.DateTimeField(auto_now_add=True)
     time_amended = models.DateTimeField(auto_now=True)
-    status = models.NullBooleanField(default=None)
+    status = models.BooleanField(null=True, blank=True, default=None)
 
     class Meta:
         unique_together = ('user', 'meeting')
