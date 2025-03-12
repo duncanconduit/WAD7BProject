@@ -1,5 +1,5 @@
 {% extends 'dashboard/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title_block %}
 user Page
@@ -11,5 +11,6 @@ user Page
 	this is the user page<br />
     <li><a href="{% url 'dashboard:notifications' %}">notifications</a></li>
 	<li><a href="{% url 'dashboard:create_meeting' %}">create meeting</a></li>
-    
+    <li><a href="{% url 'dashboard:meetings' %}">Meetings</a></li>
+
 {% endblock %}

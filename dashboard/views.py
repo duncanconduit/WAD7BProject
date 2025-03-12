@@ -10,3 +10,6 @@ def create_meeting(request):
 def notifications(request):
     return render(request,'dashboard/notifications.html')
 
+def calendar_view(request):
+    return render(request, 'dashboard/calendar.html')
+
