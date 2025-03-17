@@ -1,0 +1,52 @@
+/* Floating label transitions */
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+  top: 0.15rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  transform: none;
+}
+
+/* Red border: Only when NOT focused, content exists (not placeholder-shown), and invalid */
+.floating-input:not(:focus):not(:placeholder-shown):invalid {
+  border-color: red !important;
+}
+
+/* Error message: Only when NOT focused, content exists, and invalid */
+.floating-input:not(:focus):not(:placeholder-shown):invalid + .floating-label + #error-label {
+  display: block;
+}
+
+/* Always hide error when focused */
+.floating-input:focus + .floating-label + #error-label {
+  display: none !important;
+}
+
+/* Disable active shrink effect when the button is disabled */
+button[type="submit"]:disabled {
+    transform: none !important;
+    transition: none !important;
+    color: #878cf7 !important;
+
+.custom-underline {
+  position: relative;
+}
+
+.custom-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 2px; 
+  opacity: 0;
+  transform: none;
+  transition: none;
+}
+
+.custom-underline:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}

@@ -1,15 +1,11 @@
-{% extends 'dashboard/base.html' %}
-{% load staticfiles %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block title_block %}
 user Page
 {% endblock %}
 
 {% block body_block %}
-	<h1>Welcome (user)</h1>
-	display of all meetings <br />
-	this is the user page<br />
-    <li><a href="{% url 'dashboard:notifications' %}">notifications</a></li>
-	<li><a href="{% url 'dashboard:create_meeting' %}">create meeting</a></li>
-    
+	<h1>Welcome to eventio</h1>
+	You are not logged in.  
 {% endblock %}

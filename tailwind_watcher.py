@@ -5,8 +5,8 @@ def run_tailwind_watch():
     command = [
         'npx',
         'tailwindcss',
-        '-i', './static/css/input.css',
-        '-o', './static/css/output.css',
+        '-i', './static/css/tailwind/input.css',
+        '-o', './static/css/tailwind/output.css',
         '--watch'
     ]
     process = subprocess.Popen(command)

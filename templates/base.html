@@ -1,32 +1,118 @@
 <!DOCTYPE html>
-    <html>
-        <head lang="en">
-            <title>
-                eventio -
-                {% block title_block %}
-                   Template title
-                {% endblock %}
-            </title>
-        </head>
-        <body>
-            <div>
+{% load static %}
+<html lang="en-gb"">
+<head>
+    <meta charset=" UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>
+    eventio -
+    {% block title_block %}
+    Template title
+    {% endblock %}
+</title>
+<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}" />
+<link rel="stylesheet" href="{% static 'css/tailwind/output.css' %}" />
+<link rel="icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'favicon/favicon.ico?v=M44lzPylqQ' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+<link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+{% block head %}
+{% endblock %}
+</head>
+
+<body
+    class="bg-white text-neutral-900 dark:bg-brand-background dark:text-neutral-100 transition-colors duration-200 font-marlinSquare min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <header class="mb-6 flex items-center justify-between">
+            <h1 class="text-3xl font-bold lowercase text-brand-primary dark:text-brand-light">
+                <a href="{% url 'dashboard:index' %}"
+                    class="hover:text-brand-dark dark:hover:text-brand-primary transition-colors">
+                    eventio
+                </a>
+            </h1>
+        </header>
+
+        <main class="bg-white dark:bg-brand-background dark:text-neutral-100 transition-colors duration-200">
             {% block body_block %}
-                This is body_block's default content
-            {% endblock %}            
-            </div>
-            <div>
+            This is the default body content.
+            {% endblock %}
+        </main>
+
+        <aside>
             {% block sidebar_block %}
             {% endblock %}
-            </div>                
-            <hr />
-            <div>
-                <ul>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'register' %}">Register</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
-                    <li><a href="{% url 'dashboard:index' %}">User page</a></li>
-                </ul>                    
+        </aside>
+        <footer class="border-t border-neutral-300 dark:border-neutral-700 py-4 mt-8">
+            <div class="flex flex-wrap justify-between items-center">
+                <nav>
+                    <ul class="flex flex-wrap space-x-6 items-center">
+                        {% url 'dashboard:index' as index_url %}
+                        {% if not request.path == index_url %}
+                        <li>
+                            <a href="{{ index_url }}" class="hover:text-brand-primary transition-colors font-medium">
+                                Home
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'accounts:logout' %}"
+                                class="hover:text-brand-primary transition-colors font-medium">
+                                Logout
+                            </a>
+                        </li>
+                        {% else %}
+                        {% url 'accounts:login' as login_url %}
+                        {% if not request.path == login_url %}
+                        <li>
+                            <a href="{{ login_url }}" class="hover:text-brand-primary transition-colors font-medium">
+                                Login
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% url 'accounts:register' as register_url %}
+                        {% if not request.path == register_url %}
+                        <li>
+                            <a href="{{ register_url }}" class="hover:text-brand-primary transition-colors font-medium">
+                                Register
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% url 'about' as about_url %}
+                        {% if not request.path == about_url %}
+                        <li>
+                            <a href="{{ about_url }}" class="hover:text-brand-primary transition-colors font-medium">
+                                About
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'contact' %}"
+                                class="hover:text-brand-primary transition-colors font-medium">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="text-center">
+                    <p class="text-sm text-light_secondary_action dark:text-dark_secondary_action ">
+                        &copy; <span id="year"></span> eventio and its
+                        <a href="https://example.com" target="_blank" rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline">
+                            authors</a>. All rights reserved.
+                    </p>
+                </div>
             </div>
-        </body>
-    </html>
+        </footer>
+    </div>
+</body>
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</html>
