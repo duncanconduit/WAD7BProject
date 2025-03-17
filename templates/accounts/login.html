@@ -1,0 +1,17 @@
+{% extends "dashboard/base.html" %}
+
+{% block body_block %}
+<h2>login</h2>
+<form method="post">
+    {% csrf_token %}
+    <label>Username：</label>
+    <input type="text" name="username" required>
+    
+    <label>Password：</label>
+    <input type="password" name="password" required>
+    
+    <button type="submit">login</button>
+</form>
+<p>Do not have account？<a href="{% url 'register' %}">Register</a></p>
+<a href="{% url 'password_reset' %}">Forget password？</a>
+{% endblock %}
