@@ -22,3 +22,6 @@ def create_meeting(request):
 @login_required
 def notifications(request):
     return render(request, 'dashboard/notifications.html')
+
+def calendar_view(request):
+    return render(request, 'dashboard/calendar.html')
