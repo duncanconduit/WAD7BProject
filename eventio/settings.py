@@ -133,3 +133,5 @@ from tailwind_watcher import start_tailwind_thread
 
 if DEBUG and os.getenv('TAILWIND_WATCHER') == 'True':
     start_tailwind_thread()
+
+AUTH_USER_MODEL = 'accounts.User'

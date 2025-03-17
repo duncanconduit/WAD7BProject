@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title_block %}
+	login
+{% endblock %}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}"/>
+	<script src="{% static 'js/accounts/login.js' %}"></script>
+{% endblock %}
+{% block body_block %}
+	<div class="max-w-md w-full mx-auto text-center">
+		<h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white text-center mb-2">
+			Sign in
+		</h2>
+		<h3 class="text-lg font-regular text-neutral-700 dark:text-neutral-300 mb-6">
+			Welcome back to eventio.
+		</h3>
+		<div id="error-message" class="hidden mb-4 p-4 rounded-md bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-100 border border-red-200 dark:border-red-400">
+			<p class="text-sm font-medium"></p>
+		</div>
+		<form id="login_form" method="post" action="{% url 'accounts:login' %}?next={{ request.GET.next }}" class="space-y-4 justify-center">
+			{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+			<div class="relative mx-auto w-5/6">
+				<input type="email" name="email" id="email" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+					                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+					                       dark:border-transparent dark:bg-darktextbox dark:text-white pt-5"/>
+				<label for="email" class="floating-label absolute left-4 top-4 text-darkinputlabel transition-all duration-200 text-base">
+					Email
+				</label>
+				<label id="error-label" class="absolute left-4 font-normal bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+					Please enter a valid email address.
+				</label>
+			</div>
+			<div class="relative mx-auto w-5/6">
+				<input type="password" name="password" id="password" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+					                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+					                       dark:border-transparent dark:bg-darktextbox dark:text-white pt-5"/>
+				<label for="password" class="floating-label absolute left-4 top-4 text-darkinputlabel transition-all duration-200 text-base">
+					Password
+				</label>
+			</div>
+			<div class="flex items-center justify-center">
+				<a href="#" class="custom-underline text-light_secondary_action font-medium dark:text-dark_secondary_action text-sm">
+					Forgot your password?
+				</a>
+			</div>
+			<button type="submit" class="w-1/2 mx-auto py-3 px-3 rounded-md shadow-lg text-sm font-medium text-white
+					           bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary
+					           transition-transform transform duration-300 hover:scale-105">
+				Sign in
+			</button>
+			<div class="flex items-center justify-center">
+				<a href="/accounts/register" class="custom-underline text-light_secondary_action font-medium dark:text-dark_secondary_action text-sm">
+					Create an account
+				</a>
+			</div>
+		</form>
+	</div>
+{% endblock %}
