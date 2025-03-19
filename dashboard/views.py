@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from meetings.models import Meeting
 
 def index(request):
     if request.user.is_authenticated:
@@ -13,7 +15,9 @@ def dashboard(request):
 
 @login_required
 def meetings(request):
-    return render(request, 'dashboard/meetings.html')
+    meeting_list = list(Meeting.objects.values("latitude", "longitude"))  
+    context = {"meetings": meeting_list}
+    return render(request, "dashboard/meetings.html", context)
 
 @login_required
 def create_meeting(request):

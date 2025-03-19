@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Meeting
 from django.http import JsonResponse
 from django.utils.timezone import now
+from django.conf import settings
 
 # view to display meetings as events for calendar api
 def calendar_view(request):
@@ -17,6 +18,10 @@ def calendar_view(request):
         }
         for meeting in meetings
     ]
+
+    context = {
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+    }
 
     return JsonResponse(events, safe=False)
 
