@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title_block %}
+&#183; register
+{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/accounts/register.css' %}" />
+<script src="{% static 'js/accounts/register.js' %}"></script>
+{% endblock %}
+{% block body_block %}
+<div class="max-w-md w-full mx-auto text-center">
+    <h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white text-center mb-2">
+        Create an account
+    </h2>
+    <h3 class="text-base font-regular text-neutral-700 dark:text-neutral-300 mb-6">
+        Accounts are used to organise events and meetings on eventio, and invite people both inside and outside your
+        organisation.
+    </h3>
+    <div id="error-message"
+        class="hidden mb-4 p-4 rounded-md bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-100 border border-red-200 dark:border-red-400">
+        <p class="text-sm font-medium"></p>
+    </div>
+    <form id="register_form" method="post" action="{% url 'accounts:register' %}" class="space-y-4 justify-center">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+        <!-- First Name Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="text" name="first-name" id="first-name" required placeholder=" "
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                           focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="first-name"
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                First Name
+            </label>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="text" name="last-name" id="last-name" required placeholder=" "
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                           focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="last-name"
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Last Name
+            </label>
+        </div>
+
+        <!-- Email Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="email" name="email" id="email" required placeholder=" "
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                           focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="email"
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Email
+            </label>
+            <label id="email-error-label"
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+            </label>
+        </div>
+
+        <div class="relative mx-auto w-5/6">
+            <div>
+                <button type="button"
+                    class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    id="menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
+                    <span id="selected-option" class="font-normal">Choose Organisation</span>
+                    <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="dropdown-menu"
+                class="absolute w-full left-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
+                role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                <div class="py-1" role="none">
+                    {% for org in organisations %}
+                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                        onclick="selectOrganisation('{{ org.org_id }}', '{{ org.name }}'); return false;">
+                        {{ org.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <input type="hidden" name="organisation" id="organisation" value="">
+        </div>
+
+        <!-- Password Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="password" name="password" id="password" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md 
+                    focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary 
+                    dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="password"
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Password
+            </label>
+            <label id="password-error-label"
+                class="field-error absolute left-4 font-normal bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+            </label>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="password" name="confirm_password" id="confirm_password" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md 
+                    focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary 
+                    dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="confirm_password"
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Confirm Password
+            </label>
+            <label id="confirm-password-error-label"
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+                Passwords do not match.
+            </label>
+        </div>
+        <button type="submit"
+            class="w-1/2 mx-auto py-3 px-3 rounded-md shadow-lg text-sm font-medium text-white bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-transform transform duration-300 hover:scale-105">
+            Create an account
+        </button>
+
+        <div class="flex items-center justify-center">
+            <a href="/accounts/login"
+                class="custom-underline text-light_secondary_action font-medium dark:text-dark_secondary_action text-sm">
+                Sign in
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
