@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.contrib import messages
+from accounts.models import User, Organisation
 
 def login(request):
     if request.method == 'POST':
@@ -29,7 +31,53 @@ def logout(request):
 
 def profile(request):
     return render(request,'accounts/profile.html')
+
 def register(request):
-    return render(request,'accounts/register.html')
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('confirm_password')
+        first_name = request.POST.get('first-name')
+        last_name = request.POST.get('last-name')
+        profile_picture = request.POST.get('profile_picture') 
+        organisation_id = request.POST.get('organisation')  # organisation comes from select
+
+        if not all([email, password, password_confirm, first_name, last_name]):
+            print("not all fields filled")
+            messages.error(request, "Please fill in all required fields.")
+            organisations = Organisation.objects.all()
+            return render(request, 'accounts/register.html', {'organisations': organisations})
+
+        if password != password_confirm:
+            print("passwords do not match")
+            return JsonResponse({'success': False, 'message': 'Something went wrong. Please try again.'}) 
+
+        if User.objects.filter(email=email).exists():
+            print("user already exists")
+            return JsonResponse({'success': False, 'message': 'Something went wrong. Please try again.'})
+        
+        organisation = None
+        if organisation_id:
+            try:
+                organisation = Organisation.objects.get(org_id=organisation_id)
+            except Organisation.DoesNotExist:
+                print("organisation does not exist")
+                return JsonResponse({'success': False, 'message': 'Organisation does not exist.'})
+
+        user = User(
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            profile_picture=profile_picture or None,
+            organisation=organisation
+        )
+        user.set_password(password)
+        user.save()
+        return JsonResponse({'success': True, 'redirect': reverse('accounts:login')})
+
+    # For GET requests, fetch all organisations and pass them to the template
+    organisations = Organisation.objects.all()
+    return render(request, 'accounts/register.html', {'organisations': organisations})
+
 def settings(request):
     return render(request,'accounts/settings.html')

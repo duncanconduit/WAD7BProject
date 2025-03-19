@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title_block %}
-	login
+    &#183; login
 {% endblock %}
 {% block head %}
 	<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}"/>
@@ -12,7 +12,7 @@
 		<h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white text-center mb-2">
 			Sign in
 		</h2>
-		<h3 class="text-lg font-regular text-neutral-700 dark:text-neutral-300 mb-6">
+		<h3 class="text-base font-regular text-neutral-700 dark:text-neutral-300 mb-6">
 			Welcome back to eventio.
 		</h3>
 		<div id="error-message" class="hidden mb-4 p-4 rounded-md bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-100 border border-red-200 dark:border-red-400">
@@ -24,19 +24,19 @@
 			<div class="relative mx-auto w-5/6">
 				<input type="email" name="email" id="email" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
 					                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
-					                       dark:border-transparent dark:bg-darktextbox dark:text-white pt-5"/>
-				<label for="email" class="floating-label absolute left-4 top-4 text-darkinputlabel transition-all duration-200 text-base">
+					                       dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+				<label for="email" class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
 					Email
 				</label>
-				<label id="error-label" class="absolute left-4 font-normal bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+				<label id="error-label" class="absolute left-4 font-light text-[#e1686e] bottom-1 transition-all duration-200 text-xs hidden">
 					Please enter a valid email address.
 				</label>
 			</div>
 			<div class="relative mx-auto w-5/6">
 				<input type="password" name="password" id="password" required placeholder=" " class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
 					                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
-					                       dark:border-transparent dark:bg-darktextbox dark:text-white pt-5"/>
-				<label for="password" class="floating-label absolute left-4 top-4 text-darkinputlabel transition-all duration-200 text-base">
+					                       dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+				<label for="password" class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
 					Password
 				</label>
 			</div>
