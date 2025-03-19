@@ -131,14 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function toggleDropdown() {
     const dropdown = document.getElementById('dropdown-menu');
+    const arrowIcon = document.getElementById("arrow-icon");
     dropdown.classList.toggle('hidden');
+    arrowIcon.classList.toggle("rotate-180");
 }
 
 function selectOrganisation(orgId, orgName) {
     document.getElementById('organisation').value = orgId;
     document.getElementById('selected-option').textContent = orgName;
     toggleDropdown();
-    // Trigger validation after selection
     document.getElementById('organisation').dispatchEvent(new Event('change'));
 }
 
@@ -147,5 +148,6 @@ window.addEventListener('click', function(e) {
     const button = document.getElementById('menu-button');
     if (!button.contains(e.target) && !dropdown.contains(e.target)) {
       dropdown.classList.add('hidden');
+      document.getElementById('arrow-icon').classList.remove('rotate-180');
     }
 });

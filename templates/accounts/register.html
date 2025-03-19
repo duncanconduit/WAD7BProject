@@ -62,32 +62,40 @@
 
         <div class="relative mx-auto w-5/6">
             <div>
-                <button type="button"
-                    class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    id="menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
-                    <span id="selected-option" class="font-normal">Choose Organisation</span>
-                    <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
+              <button type="button"
+                class="inline-flex w-full justify-between items-center gap-x-1.5 border border-inputborder rounded-md px-3 py-2 text-sm font-semibold text-gray-900 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox shadow-sm"
+                id="menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
+                <span id="selected-option" class="dark:text-white font-normal"><span class="font-light text-darkinputlabel">Choose Organisation</span></span>
+                <svg
+                  id="arrow-icon"
+                  class="h-5 w-5 text-gray-400 transform transition-transform duration-200 rotation-0"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path fill-rule="evenodd"
+                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
             </div>
-
+          
             <div id="dropdown-menu"
-                class="absolute w-full left-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
-                role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                <div class="py-1" role="none">
-                    {% for org in organisations %}
-                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
-                        onclick="selectOrganisation('{{ org.org_id }}', '{{ org.name }}'); return false;">
-                        {{ org.name }}
-                    </a>
-                    {% endfor %}
-                </div>
+              class="absolute w-full left-0 z-10 mt-2 origin-top-right rounded-md bg-white dark:bg-darktextbox shadow-lg ring-1 ring-black/5 border border-inputborder dark:border-transparent"
+              role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+              <div class="py-1" role="none">
+                {% for org in organisations %}
+                <a href="#"
+                  class="block rounded-md px-4 py-2 text-sm text-left dark:text-darkinputlabel hover:outline-none hover:ring-1 hover:ring-brand-light"
+                  role="menuitem"
+                  onclick="selectOrganisation('{{ org.org_id }}', '{{ org.name }}'); return false;">
+                  {{ org.name }}
+                </a>
+                {% endfor %}
+              </div>
             </div>
             <input type="hidden" name="organisation" id="organisation" value="">
-        </div>
+          </div>
 
         <!-- Password Field -->
         <div class="relative mx-auto w-5/6">
