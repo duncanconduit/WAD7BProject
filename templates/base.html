@@ -19,6 +19,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
 <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
 <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+<script src="{% static 'js/dropdown.js' %}"></script>
 {% block head %}
 {% endblock %}
 </head>
@@ -28,12 +29,65 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <header class="mb-6 flex items-center justify-between">
+            <div class="flex w-full justify-between items-center">
             <h1 class="text-3xl font-bold lowercase text-brand-primary dark:text-brand-light">
-                <a href="{% url 'dashboard:index' %}"
-                    class="hover:text-brand-dark dark:hover:text-[#7eb8d6] text-brand-primary">
-                    eventio
+            <a href="{% url 'dashboard:index' %}"
+                class="hover:text-brand-dark dark:hover:text-[#7eb8d6] text-brand-primary">
+                eventio
+            </a>
+            </h1>   
+            {% if user.is_authenticated %}
+            <div class="relative inline-block dropdown">
+                {% url 'accounts:login' as login_url %}
+                <div class="flex items-center space-x-4">
+                    <div class="font-bold">
+                        Hi &#128075,
+                        {% if user.first_name %}
+                        {{ user.first_name }}
+                        {% else %}
+                        {{ user.username }}
+                        {% endif %}
+                    </div>
+                <button id="dropdownToggle" type="button" class="flex items-center focus:outline-none" aria-haspopup="true" aria-controls="dropdownMenu">
+                    {% if user.userprofile.picture %}
+                    <img src="{{ user.userprofile.picture.url }}" alt="Profile Picture"
+                        class="rounded-full h-8 w-8 object-cover">
+                    {% else %}
+                    <div class="rounded-full h-8 w-8 bg-neutral-500 flex items-center justify-center">
+                        <span class="text-white">
+                            {{ user.first_name|slice:":1"|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|default:""|upper }}
+                        </span>
+                    </div>
+                    </button>
+                    {% endif %}
+                </div>
+                <div id="dropdownMenu"
+                    class="absolute right-0 z-20 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800 hidden min-w-max opacity-0 transform scale-90 transition-all duration-100 ease-out">
+                <a href="#" class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                  <div class="mx-1">
+                    <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">{{ user.first_name }} {{ user.last_name }} </h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ user.organisation }}</p>
+                  </div>
                 </a>
-            </h1>
+            
+                <hr class="border-gray-200 dark:border-gray-700">
+            
+                <a href="#" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profile</a>
+
+                <a href="#" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Settings</a>
+
+                <hr class="border-gray-200 dark:border-gray-700">
+            
+                <a href="/accounts/logout" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Sign Out</a>
+              </div>
+            </div>
+            {% else %}
+                {% url 'accounts:login' as login_url %}
+                <a href="{{ login_url }}" class="hover:text-brand-dark font-medium dark:hover:text-[#7eb8d6]">
+                    Sign in
+                </a>
+            {% endif %}
+            </div>
         </header>
 
         <main class="bg-white dark:bg-brand-background dark:text-neutral-100 transition-colors duration-200">
@@ -46,7 +100,7 @@
             {% block sidebar_block %}
             {% endblock %}
         </aside>
-        <footer class="border-t border-neutral-300 dark:border-neutral-700 py-4 mt-8">
+        <footer class="border-t border-neutral-300 dark:border-neutral-700 py-4 px-2 mt-8">
             <div class="flex flex-wrap justify-between items-center">
                 <nav>
                     <ul class="flex flex-wrap space-x-6 items-center">
@@ -102,7 +156,7 @@
                 <div class="text-center">
                     <p class="text-sm text-light_secondary_action dark:text-dark_secondary_action ">
                         &copy; <span id="year"></span> eventio and its
-                        <a href="https://example.com" target="_blank" rel="noopener noreferrer"
+                        <a href="{% url 'about' %}#authors" rel="noopener noreferrer"
                             class="font-medium dark:text-brand-primary dark:hover:text-brand-light hover:underline">
                             authors</a>. All rights reserved.
                     </p>
