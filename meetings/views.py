@@ -3,6 +3,9 @@ from .models import Meeting
 from django.http import JsonResponse
 from django.utils.timezone import now
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 # view to display meetings as events for calendar api
 def calendar_view(request):
@@ -38,3 +41,14 @@ def get_meetings(request):
         for meeting in meetings
     ]
     return JsonResponse(events, safe=False)
+
+
+@login_required
+def view(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    
+
+    if request.user != meeting.organiser and not meeting.invitations.filter(user=request.user).exists():
+        raise Http404("Meeting not found")
+
+    return render(request, 'meetings/view.html', {'meeting': meeting})

@@ -117,7 +117,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+#stops dajngo from displaying local time for different time zones
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
