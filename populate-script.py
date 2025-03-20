@@ -13,6 +13,29 @@ def populate():
         name="Example Organisation"
     )
 
+    # Create some sample users
+    user_data = [
+        {"email": "alice@example.com", "first_name": "Alice", "last_name": "Smith", "password": "testpassword123"},
+        {"email": "bob@example.com", "first_name": "Bob", "last_name": "Johnson", "password": "testpassword456"},
+        {"email": "charlie@example.com", "first_name": "Charlie", "last_name": "Brown", "password": "testpassword789"}
+    ]
+
+    for data in user_data:
+        user, created = User.objects.get_or_create(
+            email=data["email"],
+            defaults={
+                "first_name": data["first_name"],
+                "last_name": data["last_name"],
+                "organisation": org
+            }
+        )
+        if created:
+            user.set_password(data["password"])
+            user.save()
+            print(f"Created user: {user.email}")
+        else:
+            print(f"User already exists: {user.email}")
+
 
     place_data= [
         {"name": "Room 1", "location": "Building 1, Floor 2", "capacity": 10},
@@ -73,30 +96,7 @@ def populate():
         print(f"Created invitation for {user.email} to {meeting.description}")
     else:
         print(f"Invitation already exists for {user.email} to {meeting.description}")
-        
 
-    # Create some sample users
-    user_data = [
-        {"email": "alice@example.com", "first_name": "Alice", "last_name": "Smith", "password": "testpassword123"},
-        {"email": "bob@example.com", "first_name": "Bob", "last_name": "Johnson", "password": "testpassword456"},
-        {"email": "charlie@example.com", "first_name": "Charlie", "last_name": "Brown", "password": "testpassword789"}
-    ]
-
-    for data in user_data:
-        user, created = User.objects.get_or_create(
-            email=data["email"],
-            defaults={
-                "first_name": data["first_name"],
-                "last_name": data["last_name"],
-                "organisation": org
-            }
-        )
-        if created:
-            user.set_password(data["password"])
-            user.save()
-            print(f"Created user: {user.email}")
-        else:
-            print(f"User already exists: {user.email}")
-
+    
 if __name__ == '__main__':
     populate()
