@@ -1,102 +1,178 @@
 import os
 import django
+import random
+from datetime import datetime, timedelta, time
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eventio.settings')
 django.setup()
 
+from django.utils import timezone
 from accounts.models import User, Organisation
-from meetings.models import Place,Meeting,Invitation
+from meetings.models import Place, Meeting, Invitation
 
-def populate():
-    # Create an example organisation
-    org, _ = Organisation.objects.get_or_create(
-        name="Example Organisation"
-    )
+def clear_old_data():
+    # Completely delete previous data
+    print("Deleting old Invitations...")
+    Invitation.objects.all().delete()
+    print("Deleting old Meetings...")
+    Meeting.objects.all().delete()
+    print("Deleting old Places...")
+    Place.objects.all().delete()
+    print("Deleting old Users...")
+    User.objects.all().delete()
+    print("Deleting old Organisations...")
+    Organisation.objects.all().delete()
 
-    # Create some sample users
-    user_data = [
-        {"email": "alice@example.com", "first_name": "Alice", "last_name": "Smith", "password": "testpassword123"},
-        {"email": "bob@example.com", "first_name": "Bob", "last_name": "Johnson", "password": "testpassword456"},
-        {"email": "charlie@example.com", "first_name": "Charlie", "last_name": "Brown", "password": "testpassword789"}
-    ]
+def create_organisations():
+    org_names = ["Alpha Corp", "Beta Limited", "Gamma Enterprises"]
+    org_objects = {}
+    for name in org_names:
+        # Create new organisation since old data has been removed
+        org = Organisation.objects.create(name=name)
+        org_objects[name] = org
+        print(f"Created organisation: {org.name}")
+    return org_objects
 
-    for data in user_data:
-        user, created = User.objects.get_or_create(
-            email=data["email"],
-            defaults={
-                "first_name": data["first_name"],
-                "last_name": data["last_name"],
-                "organisation": org
-            }
-        )
-        if created:
-            user.set_password(data["password"])
-            user.save()
-            print(f"Created user: {user.email}")
-        else:
-            print(f"User already exists: {user.email}")
-
-
-    place_data= [
-        {"name": "Room 1", "location": "Building 1, Floor 2", "capacity": 10},
-        {"name": "Room 2", "location": "Building 1, Floor 3", "capacity": 10},
-        {"name": "Room 3", "location": "Building 2, Floor 3", "capacity": 20}
-    ]
-
-    for data in place_data:
-        place, created = Place.objects.get_or_create(
-            name=data["name"],
-            defaults={
-                "location": data["location"],
-                "capacity": data["capacity"]
-            }
-        )
-        if created:
-            print(f"Created place: {place.name}")
-        else:
-            print(f"Place already exists: {place.name}")
+def create_users(org_objects):
+    users = []
+    first_names = ["Alice", "Bob", "Charlie", "Diana", "Edward", "Fiona", "George", "Hannah", "Ian", "Julia",
+                   "Kevin", "Laura", "Michael", "Nina", "Oliver", "Paula", "Quentin", "Rachel", "Steven", "Tina",
+                   "Umar", "Victoria", "Walter", "Xenia", "Yannick", "Zoe", "Aaron", "Beatrice", "Caleb", "Deborah",
+                   "Ethan", "Faith", "Gavin", "Helena", "Isaac", "Jasmine", "Kyle", "Lara", "Martin", "Nora",
+                   "Owen", "Penny", "Quincy", "Rita", "Samuel", "Teresa", "Ulysses", "Valerie", "Wendy", "Xander"]
     
-    meeting_data=[
-        {"description": "dfasfasd", "start_time": "2025-03-20 10:00:00", "end_time": "2025-03-20 12:00:00", "organiser_email":"alice@example.com","place_name":"Room 1"},
-        {"description": "dfasfasd", "start_time": "2025-04-20 09:00:00", "end_time": "2025-04-20 10:00:00", "organiser_email":"alice@example.com","place_name":"Room 2"},
+    last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Rodriguez", "Wilson",
+                  "Martinez", "Anderson", "Taylor", "Thomas", "Hernandez", "Moore", "Martin", "Jackson", "Thompson", "White",
+                  "Lopez", "Lee", "Gonzalez", "Harris", "Clark", "Lewis", "Robinson", "Walker", "Perez", "Hall",
+                  "Young", "Allen", "Sanchez", "Wright", "King", "Scott", "Green", "Baker", "Adams", "Nelson",
+                  "Hill", "Ramirez", "Campbell", "Mitchell", "Roberts", "Carter", "Phillips", "Evans", "Turner", "Torres"]
+    
+    total_users = 50
+    org_names = list(org_objects.keys())
+    for i in range(total_users):
+        # Distribute users evenly by choosing an organisation via round robin:
+        org_name = org_names[i % len(org_names)]
+        org = org_objects[org_name]
+        first_name = first_names[i % len(first_names)]
+        last_name = last_names[i % len(last_names)]
+        email = f"user{i+1}@example.com"
+        user = User.objects.create(email=email,
+                                   first_name=first_name,
+                                   last_name=last_name,
+                                   organisation=org)
+        user.set_password("defaultpassword")
+        user.save()
+        users.append(user)
+        print(f"Created user: {user.email} assigned to {org.name}")
+    return users
+
+def create_places():
+    places_data = [
+        {"name": "Conference Room A", "location": "Main Building, Floor 1", "capacity": 20},
+        {"name": "Conference Room B", "location": "Main Building, Floor 2", "capacity": 15},
+        {"name": "Meeting Room 1", "location": "Annex Building, Floor 1", "capacity": 10},
+        {"name": "Meeting Room 2", "location": "Annex Building, Floor 2", "capacity": 12},
+        {"name": "Board Room", "location": "Executive Wing, Floor 3", "capacity": 8},
+        {"name": "Training Room", "location": "Learning Centre, Floor 1", "capacity": 25},
+        {"name": "Seminar Hall", "location": "Convention Centre, Ground Floor", "capacity": 40},
+        {"name": "Strategy Room", "location": "Main Building, Floor 3", "capacity": 10},
+        {"name": "Huddle Room", "location": "Open Office, Floor 1", "capacity": 6},
+        {"name": "Open Space", "location": "Rooftop", "capacity": 30},
     ]
 
-    for data in meeting_data:
-        #for foreign keys
-        organiser = User.objects.get(email=data["organiser_email"])
-        place = Place.objects.get(name=data["place_name"])
+    places = {}
+    for data in places_data:
+        place = Place.objects.create(
+            name=data["name"],
+            location=data["location"],
+            capacity=data["capacity"]
+        )
+        places[place.name] = place
+        print(f"Created place: {place.name}")
+    return places
 
-        meeting,created=Meeting.objects.get_or_create(
-            description=data["description"],
-            start_time=data["start_time"],
-            end_time=data["end_time"],
+def random_business_datetime(min_offset=timedelta(hours=1), max_offset=timedelta(weeks=2)):
+    """
+    Returns a datetime between now+min_offset and now+max_offset with a time adjusted to be within business hours (9am-17pm).
+    """
+    now = timezone.now()
+    # Choose a random timedelta between the given range in seconds.
+    total_seconds = (max_offset - min_offset).total_seconds()
+    random_seconds = random.randint(0, int(total_seconds))
+    random_datetime = now + min_offset + timedelta(seconds=random_seconds)
+    
+    # Adjust to business hours:
+    business_start = time(9, 0, 0)
+    business_end = time(17, 0, 0)
+    
+    # If the random time is before business hours, move it up; if after, set to beginning of next business day.
+    if random_datetime.time() < business_start:
+        random_datetime = random_datetime.replace(hour=9, minute=0, second=0, microsecond=0)
+    elif random_datetime.time() > business_end:
+        # move to next day at 9 AM
+        random_datetime = (random_datetime + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+    return random_datetime
+
+def create_meetings(users, places):
+    meeting_objects = {}
+    total_meetings = 30
+    meeting_descriptions = [f"Meeting {i+1}" for i in range(total_meetings)]
+    place_list = list(places.values())
+    
+    for desc in meeting_descriptions:
+        # Randomly choose an organiser from the user list.
+        organiser = random.choice(users)
+        
+        # Create a meeting start time that is within business hours between 1 hour and 2 weeks in the future.
+        start_datetime = random_business_datetime()
+        # Randomly select a meeting duration of 30 mins, 45 mins, or 60 mins.
+        duration = random.choice([30, 45, 60])
+        end_datetime = start_datetime + timedelta(minutes=duration)
+        
+        # Ensure the end time is still within business hours.
+        if end_datetime.time() > time(17, 0, 0):
+            # If not, adjust the meeting duration so that it ends at or before 17:00.
+            end_datetime = start_datetime.replace(hour=17, minute=0, second=0, microsecond=0)
+        
+        # Randomly choose a meeting place.
+        place = random.choice(place_list)
+        
+        meeting = Meeting.objects.create(
+            description=desc,
+            start_time=start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            end_time=end_datetime.strftime("%Y-%m-%d %H:%M:%S"),
             organiser=organiser,
             place=place
         )
-    if created:
-        print(f"Created meeting: {meeting.description}")
-    else:
-        print(f"Meeting already exists: {meeting.description}")
+        meeting_objects[desc] = meeting
+        print(f"Created meeting: {meeting.description} organised by {organiser.email} at {place.name}")
+    return meeting_objects
 
+def create_invitations(users, meeting_objects):
+    # For each meeting, invite a random subset (*at least 3 attendees*) of users (excluding the organiser)
+    for meeting in meeting_objects.values():
+        # Filter out organiser from potential invitees
+        potential_invitees = [user for user in users if user != meeting.organiser]
+        # Random number of invitees chosen between 3 and min(total, 15)
+        num_invitees = random.randint(3, min(15, len(potential_invitees)))
+        invitees = random.sample(potential_invitees, num_invitees)
+        
+        for user in invitees:
+            # status can be one of: True (accepted), False (declined), or None (pending)
+            status = random.choice([True, False, None])
+            Invitation.objects.create(
+                user=user,
+                meeting=meeting,
+                status=status
+            )
+            print(f"Invited user {user.email} to meeting {meeting.description} (Status: {status})")
 
-    invitation_data=[
-        {"user_email": "alice@example.com", "meeting_id": 1, "status": True},
-        {"user_email": "bob@example.com", "meeting_id": 2, "status": False},
-    ]
-    for data in invitation_data:
-        user=User.objects.get(email=data["user_email"])
-        meeting=Meeting.objects.get(meeting_id=data["meeting_id"])
-
-        invitation, created = Invitation.objects.get_or_create(
-        user=user,
-        meeting=meeting,
-        defaults={"status": data["status"]}
-    )
-    if created:
-        print(f"Created invitation for {user.email} to {meeting.description}")
-    else:
-        print(f"Invitation already exists for {user.email} to {meeting.description}")
-
+def populate():
+    org_objects = create_organisations()
+    users = create_users(org_objects)
+    places = create_places()
+    meeting_objects = create_meetings(users, places)
+    create_invitations(users, meeting_objects)
     
 if __name__ == '__main__':
     populate()

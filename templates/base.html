@@ -49,20 +49,11 @@
                         {% endif %}
                     </div>
                 <button id="dropdownToggle" type="button" class="flex items-center focus:outline-none" aria-haspopup="true" aria-controls="dropdownMenu">
-                    {% if user.userprofile.picture %}
-                    <img src="{{ user.userprofile.picture.url }}" alt="Profile Picture"
-                        class="rounded-full h-8 w-8 object-cover">
-                    {% else %}
-                    <div class="rounded-full h-8 w-8 bg-neutral-500 flex items-center justify-center">
-                        <span class="text-white">
-                            {{ user.first_name|slice:":1"|default:user.username|slice:":1"|upper }}{{ user.last_name|slice:":1"|default:""|upper }}
-                        </span>
-                    </div>
+                    {% include 'common/avatar.html' with class=" rounded-full h-9 w-9" %}
                     </button>
-                    {% endif %}
                 </div>
                 <div id="dropdownMenu"
-                    class="absolute right-0 z-20 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800 hidden min-w-max opacity-0 transform scale-90 transition-all duration-100 ease-out">
+                    class="absolute right-0 z-20 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl border border-inputborder dark:border-transparent dark:bg-darktextbox hidden min-w-max opacity-0 transform scale-90 transition-all duration-100 ease-out">
                 <a href="#" class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                   <div class="mx-1">
                     <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">{{ user.first_name }} {{ user.last_name }} </h1>
@@ -72,7 +63,7 @@
             
                 <hr class="border-gray-200 dark:border-gray-700">
             
-                <a href="#" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profile</a>
+                <a href="/accounts/profile" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Profile</a>
 
                 <a href="#" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">Settings</a>
 
@@ -116,7 +107,7 @@
                         <li>
                             <a href="{% url 'accounts:logout' %}"
                                 class="hover:text-brand-light transition-colors font-medium">
-                                Logout
+                                Sign Out
                             </a>
                         </li>
                         {% else %}
@@ -124,7 +115,7 @@
                         {% if not request.path == login_url %}
                         <li>
                             <a href="{{ login_url }}" class="hover:text-brand-light transition-colors font-medium">
-                                Login
+                                Sign In
                             </a>
                         </li>
                         {% endif %}
@@ -132,7 +123,7 @@
                         {% if not request.path == register_url %}
                         <li>
                             <a href="{{ register_url }}" class="hover:text-brand-light transition-colors font-medium">
-                                Register
+                                Create an account
                             </a>
                         </li>
                         {% endif %}

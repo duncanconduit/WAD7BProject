@@ -1,0 +1,25 @@
+<div class="flex items-center">
+    {% if users|length < 5 %}
+      {% for user in users %}
+        {% include 'common/avatar.html' with user=user class="w-9 h-9 -mx-1.5 rounded-full ring-1 ring-white dark:ring-gray-900" %}
+      {% endfor %}
+    
+    {% elif users|length == 5 %}
+      {# If exactly 5 users, show the first 4, then the 5th user's avatar #}
+      {% for user in users|slice:"0:4" %}
+        {% include 'common/avatar.html' with user=user class="w-9 h-9 -mx-1.5 rounded-full ring-1 ring-white dark:ring-gray-900" %}
+      {% endfor %}
+      {% include 'common/avatar.html' with user=users|slice:"4:5"|first class="w-9 h-9 -mx-1.5 rounded-full ring-1 ring-white dark:ring-gray-900" %}
+  
+    {% else %}
+      {# If more than 5 users, show the first 4 avatars, then a "+N" badge #}
+      {% for user in users|slice:"4" %}
+        {% include 'common/avatar.html' with user=user class="w-9 h-9 -mx-1.5 rounded-full ring-1 ring-white dark:ring-gray-900" %}
+      {% endfor %}
+      <!-- +N badge -->
+      <div class="w-9 h-9 -mx-1.5 rounded-full ring-1 ring-white dark:ring-gray-900
+                  bg-gray-200 flex items-center justify-center font-medium text-gray-700">
+        +{{ users|length|add:"-4" }}
+      </div>
+    {% endif %}
+</div>

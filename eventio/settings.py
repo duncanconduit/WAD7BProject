@@ -130,6 +130,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 from tailwind_watcher import start_tailwind_thread
 
 if DEBUG and os.getenv('TAILWIND_WATCHER') == 'True':
