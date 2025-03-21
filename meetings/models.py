@@ -4,11 +4,14 @@ from accounts.models import User
 class Place(models.Model):
     place_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
-    location = models.CharField(max_length=256) # TODO: Robbie to implement a Location Integeration
+    address = models.CharField(max_length=256)  
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     capacity = models.PositiveIntegerField()
 
     def __str__(self):
         return self.name
+
 
 class Meeting(models.Model):
     meeting_id = models.AutoField(primary_key=True)

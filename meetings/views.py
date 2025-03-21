@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Meeting
 from django.http import JsonResponse
 from django.utils.timezone import now
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
@@ -20,6 +21,10 @@ def calendar_view(request):
         }
         for meeting in meetings
     ]
+
+    context = {
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+    }
 
     return JsonResponse(events, safe=False)
 
