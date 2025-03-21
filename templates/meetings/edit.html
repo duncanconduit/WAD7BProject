@@ -1,0 +1,27 @@
+{% extends 'dashboard/base.html' %}
+{% block title_block %}Edit Meeting{% endblock %}
+{% block body_block %}
+<h1>Edit Meeting</h1>
+<form method="post" action="{% url 'meetings:edit' meeting.id %}">
+    {% csrf_token %}
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" value="{{ meeting.description }}" required>
+
+    <label for="start_time">Start Time:</label>
+    <input type="datetime-local" id="start_time" name="start_time" value="{{ meeting.start_time|date:'Y-m-d\TH:i' }}" required>
+
+    <label for="end_time">End Time:</label>
+    <input type="datetime-local" id="end_time" name="end_time" value="{{ meeting.end_time|date:'Y-m-d\TH:i' }}" required>
+
+    <label for="place">Place:</label>
+    <select id="place" name="place">
+        {% for place in places %}
+        <option value="{{ place.id }}" {% if place.id == meeting.place.id %}selected{% endif %}>{{ place.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<a href="{% url 'meetings:list' %}">Back to Meetings</a>
+{% endblock %}
