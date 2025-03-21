@@ -21,6 +21,21 @@ class Meeting(models.Model):
     def __str__(self):
         return f"{self.description} on {self.start_time.strftime('%Y-%m-%d %H:%M')}"
 
+    def get_confirmed_attendees(self, exclude_user=None, include_organiser=False):
+        attendees = User.objects.filter(
+            invitations__meeting=self,
+            invitations__status=True
+        )
+        
+        if include_organiser:
+            organiser_qs = User.objects.filter(id=self.organiser.id)
+            attendees = (attendees | organiser_qs).distinct()
+        
+        if exclude_user:
+            attendees = attendees.exclude(id=exclude_user.id)
+            
+        return attendees
+    
 class Invitation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invitations')
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='invitations')
