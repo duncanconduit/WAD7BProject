@@ -32,8 +32,41 @@ def logout(request):
     auth_logout(request)
     return redirect(reverse('dashboard:index'))
 
+@login_required
 def profile(request):
-    return render(request,'accounts/profile.html')
+    user = request.user
+
+    if request.method == 'POST':
+        updated = False
+
+        new_first_name = request.POST.get('first_name', '').strip()
+        new_last_name = request.POST.get('last_name', '').strip()
+        new_email = request.POST.get('email', '').strip()
+
+        if new_first_name and new_first_name != user.first_name:
+            user.first_name = new_first_name
+            updated = True
+
+        if new_last_name and new_last_name != user.last_name:
+            user.last_name = new_last_name
+            updated = True
+
+        if new_email and new_email != user.email:
+            user.email = new_email
+            updated = True
+
+        profile_picture = request.FILES.get('profile_picture', None)
+        if profile_picture:
+            user.profile_picture = profile_picture
+            updated = True
+
+        if updated:
+            user.save()
+            messages.success(request, 'Profile updated successfully')
+        else:
+            messages.info(request, 'No changes made to your profile.')
+
+    return render(request, 'accounts/profile.html', {'user': user})
 
 def register(request):
     if not request.user.is_authenticated:

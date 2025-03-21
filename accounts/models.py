@@ -9,12 +9,13 @@ class Organisation(models.Model):
         return self.name
     
 class User(AbstractUser):
-    username = None
+    username = None 
     email = models.EmailField('email', unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    profile_picture = models.URLField(max_length=256, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     organisation = models.ForeignKey(Organisation, on_delete=models.SET_NULL, null=True, blank=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
