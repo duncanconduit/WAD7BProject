@@ -8,6 +8,8 @@ from meetings.models import Meeting, Invitation
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
+from django.http import JsonResponse
+from meetings.models import Meeting
 
 def index(request):
     if request.user.is_authenticated:
@@ -17,7 +19,9 @@ def index(request):
 
 @login_required
 def meetings(request):
-    return render(request, 'dashboard/meetings.html')
+    meeting_list = list(Meeting.objects.values("latitude", "longitude"))  
+    context = {"meetings": meeting_list}
+    return render(request, "dashboard/meetings.html", context)
 
 @login_required
 def create_meeting(request):

@@ -133,6 +133,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+GOOGLE_MAPS_API_KEY = "AIzaSyAmX6B87XcOJe1xFo7-L3rb6Ifm6FR6lUU"
+
 from tailwind_watcher import start_tailwind_thread
 
 if DEBUG and os.getenv('TAILWIND_WATCHER') == 'True':
