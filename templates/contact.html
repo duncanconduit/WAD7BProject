@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Contact
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body_block %}
+<form method="POST" action="{% url 'dashboard:dashboard' %}" id="worktype_form">
+    {% csrf_token %}
+    <!-- Hidden field to send a string value; you can also use the radio inputs directly -->
+    <input type="hidden" name="worktype" id="worktype_hidden" value="{% if worktype_value is not None %}{{ worktype_value }}{% else %}None{% endif %}">
+    
+    <div class="p-24 flex items-center justify-center">
+      <div class="inline-flex overflow-hidden border border-gray-200 rounded-lg">
+        <!-- Accepted button -->
+        <label for="accepted" class="cursor-pointer">
+          <input type="radio" name="worktype_radio" id="accepted" class="sr-only peer" value="True"
+            {% if worktype_value == True %}checked{% endif %}
+            onchange="updateWorktype(this.value)">
+          <span class="relative inline-flex items-center h-full py-2 pr-3 space-x-2 text-sm pl-7 peer-checked:bg-green-200">
+            <span class="before:w-2 before:h-2 before:bg-green-500 before:rounded-full before:absolute before:top-[14px] before:left-3">
+              Accepted
+            </span>
+          </span>
+        </label>
+        
+        <!-- Maybe button -->
+        <label for="maybe" class="cursor-pointer">
+          <input type="radio" name="worktype_radio" id="maybe" class="sr-only peer" value="None"
+            {% if worktype_value is None %}checked{% endif %}
+            onchange="updateWorktype(this.value)">
+          <span class="relative inline-flex items-center h-full py-2 pr-3 space-x-2 text-sm pl-7 peer-checked:bg-yellow-200">
+            <span class="before:w-2 before:h-2 before:bg-yellow-500 before:rounded-full before:absolute before:top-[14px] before:left-3">
+              Maybe
+            </span>
+          </span>
+        </label>
+  
+        <!-- Declined button -->
+        <label for="declined" class="cursor-pointer">
+          <input type="radio" name="worktype_radio" id="declined" class="sr-only peer" value="False"
+            {% if worktype_value is False %}checked{% endif %}
+            onchange="updateWorktype(this.value)">
+          <span class="relative inline-flex items-center h-full py-2 pr-3 space-x-2 text-sm pl-7 peer-checked:bg-red-200">
+            <span class="before:w-2 before:h-2 before:bg-red-500 before:rounded-full before:absolute before:top-[14px] before:left-3">
+              Declined
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </form>
+  
+  <script>
+    // This function updates the hidden input field and submits the form.
+    // You could modify this to use AJAX if needed.
+    function updateWorktype(value) {
+      document.getElementById('worktype_hidden').value = value;
+      // Submit the form automatically when a selection changes:
+      document.getElementById('worktype_form').submit();
+    }
+  </script>
+{% endblock %}
