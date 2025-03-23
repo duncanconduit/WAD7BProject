@@ -1,116 +1,125 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load dashboard_extras %}
 
 {% block title_block %}
 dashboard
 {% endblock %}
 
 {% block head %}
-{% load dashboard_extras %}
+<link rel="stylesheet" href="{% static 'css/dashboard/dashboard.css' %}">
 <script src="{% static 'js/dashboard/dashboard.js' %}"></script>
-<style src="{% static 'css/dashboard/dashboard.css' %}"></style>
 {% endblock %}
 
 {% block body_block %}
 <section>
-	<div class="flex justify-between items-center">
-		<h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4">
-			Dashboard
-		</h2>
-		<div class="flex gap-4">
-			<p class="hover:text-brand-light transition-colors font-medium">Create Event</p>
-			<p class="hover:text-brand-light transition-colors font-medium">View All</p>
-		</div>
-	</div>
-	<div class="py-4">
-		<div class="mx-auto px-1 max-w-6xl text-gray-500">
-			<div class="relative">
-				<div class="relative z-10 grid gap-3 grid-cols-12">
-					<!-- Up Next -->
-					<div class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
-						<h2 class="font-semibold text-gray-950 dark:text-white text-xl">Upcoming</h2>
-						
-						<div class="flex gap-5 flex-col pt-4">
-							{% for meeting in up_next %}
-							{% with invite=invites|filter_invite:meeting %}
-								{% include 'common/meetingtile.html' with meeting=meeting invite=invite %}
-							{% endwith %}
-							{% empty %}
-							<div class="flex items-center justify-between mb-3">
-								<p>No upcoming meetings in the next day.</p>
-							</div>
-							{% endfor %}
-						</div>
-					</div>
-			<!-- Organising -->
-			<div
-				class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
-				<div class="bg-white dark:bg-gray-900 rounded-xl">
-					<h2 class="text-xl font-semibold text-gray-950 dark:text-white">Organising</h2>
-					<div class="mt-4 flex flex-col gap-5">
-						{% for meeting in organising %}
-							{% include 'common/meetingtile.html' with meeting=meeting %}
-						{% empty %}
-						<p>No upcoming meetings to show.</p>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			<!-- Attending -->
-			<div
-				class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900 attending-section">
-				<div class="bg-white dark:bg-gray-900 rounded-xl">
-					<h2 class="font-semibold text-gray-950 dark:text-white text-xl">Attending</h2>
-					<div class="mt-4 flex flex-col gap-5">
-						{% for meeting in attending %}
-							{% with invite=invites|filter_invite:meeting %}
-									{% include 'common/meetingtile.html' with meeting=meeting invite=invite showinvite=True %}
-								{% endwith %}
-						{% empty %}
-						<p>No upcoming meetings to show.</p>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-			<!-- A Look Ahead -->
-			<div class="col-span-full lg:col-span-6 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
-				<div class="bg-white dark:bg-gray-900 rounded-xl">
-				  <h2 class="font-semibold text-gray-950 dark:text-white text-xl">A Look Ahead</h2>
-				  <!-- Visible container for dynamically grouping meetings -->
-				  <div id="meetings-dynamic" class="mt-4 flex flex-col gap-5"></div>
-				  <!-- Hidden container that holds all meeting tiles -->
-				  <div id="meeting-tiles" class="hidden">
-					{% for meeting in a_look_ahead %}
-					  {% with invite=invites|filter_invite:meeting %}
-						<div class="meeting-tile hidden" data-start="{{ meeting.start_time|to_timestamp }}">
-						  {% include 'common/meetingtile.html' with meeting=meeting invite=invite %}
-						</div>
-					  {% endwith %}
-					{% empty %}
-					  <div class="no-meetings" hidden></div>
-					{% endfor %}
-				  </div>
-				</div>
-			  </div>
-			<!-- Invites -->
-			<div
-				class="col-span-full lg:col-span-6 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
-				<div class="bg-white dark:bg-gray-900 rounded-xl">
-					<h2 class="font-semibold text-gray-950 dark:text-white text-xl">Invites</h2>
-					<div class="mt-4 flex flex-col gap-5">
-						{% for meeting in invites_section %}
-							{% with invite=invites|filter_invite:meeting %}
-								{% include 'common/meetingtile.html' with meeting=meeting invite=invite showinvite=True %}
-							{% endwith %}
-						{% empty %}
-						<p>No invites to show.</p>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
-	</div>
+    <div class="flex justify-between items-center">
+        <h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4">
+            Dashboard
+        </h2>
+        <div class="flex gap-4">
+            <!-- “Create Event” --> 
+            <p class="hover:text-brand-light transition-colors font-medium">
+                <a href="{% url 'dashboard:create_meeting' %}">Create Event</a>
+            </p>
+            <!-- “View All” -->
+            <p class="hover:text-brand-light transition-colors font-medium">
+                <a href="{% url 'dashboard:meetings' %}">View All</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="py-4">
+        <div class="mx-auto px-1 max-w-6xl text-gray-500">
+            <div class="relative">
+                <div class="relative z-10 grid gap-3 grid-cols-12">
+                    
+                    <!-- Up Next -->
+                    <div class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+                        <h2 class="font-semibold text-gray-950 dark:text-white text-xl">Upcoming</h2>
+                        <div class="flex gap-5 flex-col pt-4">
+                            {% for meeting in up_next %}
+                                {% with invite=invites|filter_invite:meeting %}
+                                    {% include 'common/meetingtile.html' with meeting=meeting invite=invite %}
+                                {% endwith %}
+                            {% empty %}
+                                <div class="flex items-center justify-between mb-3">
+                                    <p>No upcoming meetings in the next day.</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Organising -->
+                    <div class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+                        <div class="bg-white dark:bg-gray-900 rounded-xl">
+                            <h2 class="text-xl font-semibold text-gray-950 dark:text-white">Organising</h2>
+                            <div class="mt-4 flex flex-col gap-5">
+                                {% for meeting in organising %}
+                                    {% include 'common/meetingtile.html' with meeting=meeting %}
+                                {% empty %}
+                                    <p>No upcoming meetings to show.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attending -->
+                    <div class="col-span-full sm:col-span-3 lg:col-span-4 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900 attending-section">
+                        <div class="bg-white dark:bg-gray-900 rounded-xl">
+                            <h2 class="font-semibold text-gray-950 dark:text-white text-xl">Attending</h2>
+                            <div class="mt-4 flex flex-col gap-5">
+                                {% for meeting in attending %}
+                                    {% with invite=invites|filter_invite:meeting %}
+                                        {% include 'common/meetingtile.html' with meeting=meeting invite=invite showinvite=True %}
+                                    {% endwith %}
+                                {% empty %}
+                                    <p>No upcoming meetings to show.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- A Look Ahead -->
+                    <div class="col-span-full lg:col-span-6 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+                        <div class="bg-white dark:bg-gray-900 rounded-xl">
+                          <h2 class="font-semibold text-gray-950 dark:text-white text-xl">A Look Ahead</h2>
+                          <!-- Visible container for dynamically grouping meetings -->
+                          <div id="meetings-dynamic" class="mt-4 flex flex-col gap-5"></div>
+                          <!-- Hidden container that holds all meeting tiles -->
+                          <div id="meeting-tiles" class="hidden">
+                            {% for meeting in a_look_ahead %}
+                              {% with invite=invites|filter_invite:meeting %}
+                                <div class="meeting-tile hidden" data-start="{{ meeting.start_time|to_timestamp }}">
+                                  {% include 'common/meetingtile.html' with meeting=meeting invite=invite %}
+                                </div>
+                              {% endwith %}
+                            {% empty %}
+                              <div class="no-meetings" hidden></div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                    </div>
+
+                    <!-- Invites -->
+                    <div class="col-span-full lg:col-span-6 overflow-hidden relative p-8 rounded-xl bg-white border border-gray-200 dark:border-gray-800 dark:bg-gray-900">
+                        <div class="bg-white dark:bg-gray-900 rounded-xl">
+                            <h2 class="font-semibold text-gray-950 dark:text-white text-xl">Invites</h2>
+                            <div class="mt-4 flex flex-col gap-5">
+                                {% for meeting in invites_section %}
+                                    {% with invite=invites|filter_invite:meeting %}
+                                        {% include 'common/meetingtile.html' with meeting=meeting invite=invite showinvite=True %}
+                                    {% endwith %}
+                                {% empty %}
+                                    <p>No invites to show.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!-- end grid cols -->
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock %}

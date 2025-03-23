@@ -26,7 +26,7 @@ def login(request):
             return render(request, 'accounts/login.html')
     else:
         return redirect(reverse('dashboard:index'))
-    
+
 @login_required
 def logout(request):
     auth_logout(request)

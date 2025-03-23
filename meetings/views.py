@@ -1,14 +1,10 @@
-from django.shortcuts import render
-from meetings.models import Meeting, Invitation
-from django.shortcuts import redirect
-from django.contrib import messages
-from django.urls import reverse
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, Http404
 from django.utils.timezone import now
 from django.conf import settings
-from django.shortcuts import get_object_or_404
-from django.http import Http404
 from django.contrib.auth.decorators import login_required
+
+from meetings.models import Meeting
 
 # view to display meetings as events for calendar api
 def calendar_view(request):
@@ -24,11 +20,6 @@ def calendar_view(request):
         }
         for meeting in meetings
     ]
-
-    context = {
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
-    }
-
     return JsonResponse(events, safe=False)
 
 # optional additional view to fetch all meetings, if needed for other purposes
@@ -45,12 +36,9 @@ def get_meetings(request):
     ]
     return JsonResponse(events, safe=False)
 
-
 @login_required
 def meeting_view(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    
-
     if request.user != meeting.organiser and not meeting.invitations.filter(user=request.user).exists():
         raise Http404("Meeting not found")
 
@@ -58,4 +46,5 @@ def meeting_view(request, meeting_id):
 
 @login_required
 def meeting_create(request):
-    render(request, 'meetings/create.html')
+    # change return render
+    return render(request, 'meetings/create.html')
