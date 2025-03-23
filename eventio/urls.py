@@ -17,14 +17,20 @@ from django.contrib import admin
 from django.urls import path,include
 from django.views.generic.base import RedirectView
 from eventio import views
+from django.conf import settings
+from django.conf.urls.static import static
  
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
     path('accounts/', include('accounts.urls')),
-    # path('meetings/', include('meetings.urls')),
+    path('meetings/', include('meetings.urls')),
     path('login/', RedirectView.as_view(url='/accounts/login/', permanent=True)),
     path('logout/', RedirectView.as_view(url='/accounts/logout/', permanent=True)),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

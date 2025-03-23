@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from .helpers import AVATAR_GRADIENTS, get_random_avatar_colour
+import uuid
 
 class Organisation(models.Model):
     org_id = models.AutoField(primary_key=True)
@@ -8,7 +10,7 @@ class Organisation(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -16,6 +18,8 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
+        if not extra_fields.get('avatar_colour'):
+            extra_fields['avatar_colour'] = get_random_avatar_colour()
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -33,11 +37,13 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField('email', unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    profile_picture = models.URLField(max_length=256, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     organisation = models.ForeignKey(Organisation, on_delete=models.SET_NULL, null=True, blank=True)
+    avatar_colour = models.CharField(max_length=50, blank=True, null=True, default=get_random_avatar_colour)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -49,3 +55,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    @property
+    def avatar_gradient(self):
+        print(AVATAR_GRADIENTS.get(self.avatar_colour, 'bg-neutral-500'))
+        return AVATAR_GRADIENTS.get(self.avatar_colour, 'bg-neutral-500')

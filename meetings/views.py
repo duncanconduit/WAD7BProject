@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from .models import Meeting
+from meetings.models import Meeting, Invitation
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.urls import reverse
 from django.http import JsonResponse
 from django.utils.timezone import now
 from django.conf import settings
@@ -44,7 +47,7 @@ def get_meetings(request):
 
 
 @login_required
-def view(request, meeting_id):
+def meeting_view(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     
 
@@ -52,3 +55,7 @@ def view(request, meeting_id):
         raise Http404("Meeting not found")
 
     return render(request, 'meetings/view.html', {'meeting': meeting})
+
+@login_required
+def meeting_create(request):
+    render(request, 'meetings/create.html')

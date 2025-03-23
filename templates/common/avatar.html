@@ -1,0 +1,12 @@
+{% load accounts_extras %}
+{% get_avatar_colour user as avatar_colour %}
+{% if user.profile_picture %}
+    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="{{ class }} object-cover">
+{% else %}
+<div class="{{ class }} font-marlin font-medium {{ avatar_colour }} flex items-center justify-center">
+    <span class="text-white">
+        {{ user.first_name|slice:":1"|default:""|upper }}{{ user.last_name|slice:":1"|default:""|upper }}
+    </span>
+</div>
+{% endif %}
+

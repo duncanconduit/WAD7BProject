@@ -19,7 +19,7 @@
 			eventio is an event management platform
 		</p>
 	</section>
-	<section class="text-left">
+	<section class="text-left mb-8">
 		<h3 id="authors" class="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
 			Authors
 		</h3>
@@ -34,7 +34,7 @@
 						class="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
 						viewBox="0 0 98 96"
 						xmlns="http://www.w3.org/2000/svg"
-					  >
+					>
 						<path
 						  fill-rule="evenodd"
 						  clip-rule="evenodd"
@@ -47,13 +47,13 @@
 						   33.405-46.691C97.707 22 75.788 0 48.854 0z"
 						  fill="currentColor"
 						/>
-					  </svg>
+					</svg>
 				</a>
 				<a href="mailto:{{ author.email }}" target="_blank" class="flex items-center space-x-2 group">
 					<svg 
 						class="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
 						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 512 512">>
+						viewBox="0 0 512 512">
 					   <path d="M510.678,112.275c-2.308-11.626-7.463-22.265-14.662-31.054c-1.518-1.915-3.104-3.63-4.823-5.345
 						   c-12.755-12.818-30.657-20.814-50.214-20.814H71.021c-19.557,0-37.395,7.996-50.21,20.814c-1.715,1.715-3.301,3.43-4.823,5.345
 						   C8.785,90.009,3.63,100.649,1.386,112.275C0.464,116.762,0,121.399,0,126.087V385.92c0,9.968,2.114,19.55,5.884,28.203
@@ -68,8 +68,7 @@
 						   C453.137,418.946,447.26,420.597,440.979,420.597z M475.666,385.92c0,0.529,0,1.051-0.068,1.515L335.346,265.221L475.666,142.8
 						   V385.92z"
 						   fill="currentColor"/>
-						   />
-				   </svg>
+					</svg>
 				</a>
 			</div>
 		</div>
@@ -78,6 +77,43 @@
 			No authors found.
 		</p>
 		{% endfor %}
+	</section>
+	<section class="text-left">
+		<h3 id="credits" class="text-2xl font-semibold text-neutral-900 dark:text-white mb-4">
+			Credits
+		</h3>
+		<ul class="list-none space-y-2 px-4">
+			<li class="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-4 font-medium text-gray-600 dark:text-gray-400">
+				<a href="https://tailwindcss.com" target="_blank" class="hover:text-gray-300">
+					tailwindcss
+				</a>
+				<span class="text-sm">
+					<a href="https://github.com/tailwindlabs/tailwindcss/blob/main/LICENSE" target="_blank" class="hover:text-gray-300">
+						License
+					</a>
+				</span>
+			</li>
+			<li class="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-4 font-medium text-gray-600 dark:text-gray-400">
+				<a href="https://djangoproject.com" target="_blank" class="hover:text-gray-300">
+					Django
+				</a>
+				<span class="text-sm">
+					<a href="https://github.com/django/django/blob/main/LICENSE" target="_blank" class="hover:text-gray-300">
+						License
+					</a>
+				</span>
+			</li>
+			<li class="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-4 font-medium text-gray-600 dark:text-gray-400">
+				<a href="https://www.fontspring.com/fonts/fontmesa/marlin-soft" target="_blank" class="hover:text-gray-300">
+					Marlin Soft SQ Font
+				</a>
+				<span class="text-sm">
+					<a href="https://opensource.org/licenses/MIT" target="_blank" class="hover:text-gray-300">
+						License
+					</a>
+				</span>
+			</li>
+		</ul>
 	</section>
 </div>
 {% endblock %}
