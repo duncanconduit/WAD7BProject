@@ -1,0 +1,12 @@
+{% extends 'dashboard/base.html' %}
+{% block title_block %}Meeting Details{% endblock %}
+{% block body_block %}
+<h1>Meeting Details</h1>
+<p><strong>Description:</strong> {{ meeting.description }}</p>
+<p><strong>Start Time:</strong> {{ meeting.start_time }}</p>
+<p><strong>End Time:</strong> {{ meeting.end_time }}</p>
+<p><strong>Location:</strong> {{ meeting.place.name }}</p>
+
+<a href="{% url 'meetings:edit' meeting.id %}">Edit Meeting</a>
+<a href="{% url 'meetings:list' %}">Back to Meetings</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'dashboard/base.html' %}
+{% block title_block %}Create Meeting{% endblock %}
+{% block body_block %}
+<h1>Create a New Meeting</h1>
+<form method="post" action="{% url 'meetings:create' %}">
+    {% csrf_token %}
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required>
+
+    <label for="start_time">Start Time:</label>
+    <input type="datetime-local" id="start_time" name="start_time" required>
+
+    <label for="end_time">End Time:</label>
+    <input type="datetime-local" id="end_time" name="end_time" required>
+
+    <label for="place">Place:</label>
+    <select id="place" name="place">
+        {% for place in places %}
+        <option value="{{ place.id }}">{{ place.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Create Meeting</button>
+</form>
+
+<a href="{% url 'meetings:list' %}">Back to Meetings</a>
+{% endblock %}
