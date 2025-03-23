@@ -98,7 +98,7 @@
                         {% url 'dashboard:index' as index_url %}
                         {% if not request.path == index_url %}
                         <li>
-                            <a href="{{ index_url }}" class="hover:text-brand-light font-medium">
+                            <a href="{{ index_url }}" class="hover:text-brand-light transition-colors font-medium">
                                 Home
                             </a>
                         </li>

@@ -14,94 +14,82 @@
 <h1 class="text-2xl mb-5">Your Profile</h1>
 
 <div class="mx-auto text-left align-left items-left">
-
-<form id="profile-form" method="post" action="{% url 'accounts:profile' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
-        <input type="text" name="first-name" id="first-name" required placeholder=" " value="{{ user.first_name }}"
-            class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
-                        focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
-        <label for="first-name"
-            class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
-            First Name
-        </label>
-    </div>
-
-    <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
-        <input type="text" name="first-name" id="first-name" required placeholder=" " value="{{ user.last_name }}"
-            class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
-                        focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
-        <label for="first-name"
-            class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
-            Last Name
-        </label>
-    </div>
-
-     <!-- Email Display Box Aligned to the Left -->
-     <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
-        <div class="block px-4 py-4 border border-inputborder rounded-md
-                    focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
-                    dark:border-transparent dark:bg-darktextbox dark:text-white">
-            {{ user.email }}
+    <form id="profile-form" method="post" action="{% url 'accounts:profile' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+            <input type="text" name="first-name" id="first-name" required placeholder=" " value="{{ user.first_name }}"
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="first-name"
+                   class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                First Name
+            </label>
         </div>
-        <label for="email" class="absolute left-4 font-light top-1 text-darkinputlabel transition-all duration-200 text-xs">
-            Email
-        </label>
-    </div>
 
-    <!-- Hidden submit button in case you want to submit the entire form -->
-    <button type="submit" class="hidden" id="global-submit"></button>
-</form>
+        <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+            <input type="text" name="last-name" id="last-name" required placeholder=" " value="{{ user.last_name }}"
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                       focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white" />
+            <label for="last-name"
+                   class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Last Name
+            </label>
+        </div>
+
+        <!-- Email Field (Display-only) -->
+        <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+            <div class="block px-4 py-4 border border-inputborder rounded-md
+                        focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+                        dark:border-transparent dark:bg-darktextbox dark:text-white">
+                {{ user.email }}
+            </div>
+            <label for="email"
+                   class="absolute left-4 font-light top-1 text-darkinputlabel transition-all duration-200 text-xs">
+                Email
+            </label>
+        </div>
+        
+        <!-- Profile Picture Upload Field -->
+        <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+            <input type="file" name="profile_picture" id="profile_picture"
+                   class="block w-full px-4 py-2 border border-inputborder rounded-md
+                   focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+            <label for="profile_picture"
+                   class="absolute left-4 font-light top-1 text-darkinputlabel transition-all duration-200 text-base">
+                Profile Picture
+            </label>
+        </div>
+    </form>
 </div>
+
 <script>
-    // Reusable function for setting up inline editable fields.
-    function setupEditableField(fieldId) {
-        const displayElement = document.getElementById(fieldId + '_display');
-        const inputElement = document.getElementById(fieldId + '_input');
-        const editButton = document.getElementById(fieldId + '_edit_button');
-        const saveButton = document.getElementById(fieldId + '_save_button');
-        const cancelButton = document.getElementById(fieldId + '_cancel_button');
-        const form = document.getElementById('profile-form');
+    // Listen for changes on the profile picture input.
+    document.getElementById('profile_picture').addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            // Create a new FormData instance just for the profile picture.
+            const formData = new FormData();
+            formData.append('profile_picture', this.files[0]);
+            // Add the CSRF token since Django requires it.
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
 
-        editButton.addEventListener('click', () => {
-            displayElement.classList.add('hidden');
-            inputElement.classList.remove('hidden');
-            saveButton.classList.remove('hidden');
-            cancelButton.classList.remove('hidden');
-            editButton.classList.add('hidden');
-            // Optionally focus on the input field.
-            inputElement.focus();
-        });
-
-        saveButton.addEventListener('click', () => {
-            // Update the displayed value.
-            displayElement.textContent = inputElement.value;
-            displayElement.classList.remove('hidden');
-            inputElement.classList.add('hidden');
-            saveButton.classList.add('hidden');
-            cancelButton.classList.add('hidden');
-            editButton.classList.remove('hidden');
-            // Submit the form to update the particular field.
-            // This submits the entire form, so ensure your view handles partial updates appropriately.
-            form.submit();
-        });
-
-        cancelButton.addEventListener('click', () => {
-            // Reset the input value to the current display value.
-            inputElement.value = displayElement.textContent;
-            displayElement.classList.remove('hidden');
-            inputElement.classList.add('hidden');
-            saveButton.classList.add('hidden');
-            cancelButton.classList.add('hidden');
-            editButton.classList.remove('hidden');
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setupEditableField('first_name');
-        setupEditableField('last_name');
-        setupEditableField('email');
+            // Here, the action attribute of the form is used as the endpoint.
+            fetch(document.getElementById('profile-form').action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Profile picture updated successfully.');
+                    // Optionally, you might want to refresh the profile picture display in the UI.
+                } else {
+                    console.error('An error occurred while updating the profile picture.');
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+        }
     });
 </script>
 {% endblock %}

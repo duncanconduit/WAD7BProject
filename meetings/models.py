@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+import uuid
 
 class Place(models.Model):
     place_id = models.AutoField(primary_key=True)
@@ -14,7 +15,7 @@ class Place(models.Model):
 
 
 class Meeting(models.Model):
-    meeting_id = models.AutoField(primary_key=True)
+    meeting_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=256)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
@@ -51,4 +52,3 @@ class Invitation(models.Model):
 
     def __str__(self):
         return f"Invitation for {self.user.username} to meet {self.meeting}"
-

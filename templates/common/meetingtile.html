@@ -82,7 +82,7 @@
               <!-- Accepted -->
               <label
                 for="accepted_{{ invite.id }}"
-                class="cursor-pointer flex-1 transition-all duration-200
+                class="cursor-pointer flex-1 transition-transform duration-200
                        ease-in-out hover:scale-105"
               >
                 <input
@@ -105,7 +105,7 @@
               <!-- Maybe -->
               <label
                 for="maybe_{{ invite.id }}"
-                class="cursor-pointer flex-1 transition-all duration-200
+                class="cursor-pointer flex-1 transition-transform duration-200
                        ease-in-out hover:scale-105"
               >
                 <input
@@ -128,7 +128,7 @@
               <!-- Declined -->
               <label
                 for="declined_{{ invite.id }}"
-                class="cursor-pointer flex-1 transition-all duration-200
+                class="cursor-pointer flex-1 transition-transform duration-200
                        ease-in-out hover:scale-105"
               >
                 <input
@@ -192,7 +192,7 @@
         <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/>
     </svg>
       <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
-        {{ meeting.location|default:"No location specified" }}
+        {{ meeting.place|default:"No location specified" }}
       </p>
     </div>
   </div>

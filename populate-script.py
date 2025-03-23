@@ -40,13 +40,13 @@ def create_users(org_objects):
                    "Umar", "Victoria", "Walter", "Xenia", "Yannick", "Zoe", "Aaron", "Beatrice", "Caleb", "Deborah",
                    "Ethan", "Faith", "Gavin", "Helena", "Isaac", "Jasmine", "Kyle", "Lara", "Martin", "Nora",
                    "Owen", "Penny", "Quincy", "Rita", "Samuel", "Teresa", "Ulysses", "Valerie", "Wendy", "Xander"]
-    
+
     last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Rodriguez", "Wilson",
                   "Martinez", "Anderson", "Taylor", "Thomas", "Hernandez", "Moore", "Martin", "Jackson", "Thompson", "White",
                   "Lopez", "Lee", "Gonzalez", "Harris", "Clark", "Lewis", "Robinson", "Walker", "Perez", "Hall",
                   "Young", "Allen", "Sanchez", "Wright", "King", "Scott", "Green", "Baker", "Adams", "Nelson",
                   "Hill", "Ramirez", "Campbell", "Mitchell", "Roberts", "Carter", "Phillips", "Evans", "Turner", "Torres"]
-    
+
     total_users = 50
     org_names = list(org_objects.keys())
     for i in range(total_users):
@@ -68,24 +68,25 @@ def create_users(org_objects):
 
 def create_places():
     places_data = [
-        {"name": "Conference Room A", "location": "Main Building, Floor 1", "capacity": 20},
-        {"name": "Conference Room B", "location": "Main Building, Floor 2", "capacity": 15},
-        {"name": "Meeting Room 1", "location": "Annex Building, Floor 1", "capacity": 10},
-        {"name": "Meeting Room 2", "location": "Annex Building, Floor 2", "capacity": 12},
-        {"name": "Board Room", "location": "Executive Wing, Floor 3", "capacity": 8},
-        {"name": "Training Room", "location": "Learning Centre, Floor 1", "capacity": 25},
-        {"name": "Seminar Hall", "location": "Convention Centre, Ground Floor", "capacity": 40},
-        {"name": "Strategy Room", "location": "Main Building, Floor 3", "capacity": 10},
-        {"name": "Huddle Room", "location": "Open Office, Floor 1", "capacity": 6},
-        {"name": "Open Space", "location": "Rooftop", "capacity": 30},
+        {"name": "Conference Room A", "address": "Main Building, Floor 1", "capacity": 20},
+        {"name": "Conference Room B", "address": "Main Building, Floor 2", "capacity": 15},
+        {"name": "Meeting Room 1", "address": "Annex Building, Floor 1", "capacity": 10},
+        {"name": "Meeting Room 2", "address": "Annex Building, Floor 2", "capacity": 12},
+        {"name": "Board Room", "address": "Executive Wing, Floor 3", "capacity": 8},
+        {"name": "Training Room", "address": "Learning Centre, Floor 1", "capacity": 25},
+        {"name": "Seminar Hall", "address": "Convention Centre, Ground Floor", "capacity": 40},
+        {"name": "Strategy Room", "address": "Main Building, Floor 3", "capacity": 10},
+        {"name": "Huddle Room", "address": "Open Office, Floor 1", "capacity": 6},
+        {"name": "Open Space", "address": "Rooftop", "capacity": 30},
     ]
 
     places = {}
     for data in places_data:
         place = Place.objects.create(
             name=data["name"],
-            location=data["location"],
+            address=data["address"],
             capacity=data["capacity"]
+            # latitude and longitude are optional and default to None
         )
         places[place.name] = place
         print(f"Created place: {place.name}")
@@ -93,7 +94,7 @@ def create_places():
 
 def random_business_datetime(min_offset=timedelta(hours=1), max_offset=timedelta(weeks=2)):
     """
-    Returns a datetime between now+min_offset and now+max_offset with a time adjusted to be within business hours (9am-17pm).
+    Returns a datetime between now+min_offset and now+max_offset with a time adjusted to be within business hours (9am-17:00).
     """
     now = timezone.now()
     # Choose a random timedelta between the given range in seconds.

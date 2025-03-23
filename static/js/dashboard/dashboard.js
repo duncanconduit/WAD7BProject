@@ -60,29 +60,31 @@ async function handleInvitationChange(event) {
 
         if (result.success) {
             if (newStatus === "True") {
-                moveInvitationToAttending(form);
+                // moveInvitationToAttending(form);
             } else if (newStatus === "False") {
-                removeInvitationFromList(form);
+                // removeInvitationFromList(form);
             }
         } else {
             console.error("Error updating status:", result.message);
         }
     } catch (error) {
         console.error("AJAX error:", error);
-        flashElement(form, 'error');
+        // flashElement(form, 'error');
     } finally {
         setLoadingState(form, false);
     }
 }
 
 function setLoadingState(element, isLoading) {
-    if (isLoading) {
-        element.classList.add('opacity-50');
-        element.setAttribute('aria-busy', 'true');
-    } else {
-        element.classList.remove('opacity-50');
-        element.removeAttribute('aria-busy');
-    }
+    requestAnimationFrame(() => {
+        if (isLoading) {
+            element.classList.add('opacity-50');
+            element.setAttribute('aria-busy', 'true');
+        } else {
+            element.classList.remove('opacity-50');
+            element.removeAttribute('aria-busy');
+        }
+    });
 }
 
 function formatEventTime(unixStart, unixEnd) {
@@ -210,10 +212,14 @@ function groupDynamicMeetings() {
         header.className = "text-lg font-semibold text-gray-950 dark:text-white mb-2";
         section.appendChild(header);
 
+        const div = document.createElement('div');
+        div.className = "mt-4 flex flex-col gap-5";
+        section.appendChild(div);
+
         tiles.forEach(tile => {
             const clonedTile = tile.cloneNode(true);
             clonedTile.classList.remove('hidden');
-            section.appendChild(clonedTile);
+            div.appendChild(clonedTile);
         });
 
         meetingsDynamic.appendChild(section);

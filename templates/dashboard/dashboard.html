@@ -8,13 +8,20 @@ dashboard
 {% block head %}
 {% load dashboard_extras %}
 <script src="{% static 'js/dashboard/dashboard.js' %}"></script>
+<style src="{% static 'css/dashboard/dashboard.css' %}"></style>
 {% endblock %}
 
 {% block body_block %}
 <section>
-	<h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4">
-		Dashboard
-	</h2>
+	<div class="flex justify-between items-center">
+		<h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4">
+			Dashboard
+		</h2>
+		<div class="flex gap-4">
+			<p class="hover:text-brand-light transition-colors font-medium">Create Event</p>
+			<p class="hover:text-brand-light transition-colors font-medium">View All</p>
+		</div>
+	</div>
 	<div class="py-4">
 		<div class="mx-auto px-1 max-w-6xl text-gray-500">
 			<div class="relative">
