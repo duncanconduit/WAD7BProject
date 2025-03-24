@@ -47,7 +47,7 @@ def get_meetings(request):
 
 
 @login_required
-def meeting_detail_view(request, meeting_id):
+def meeting_view(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     
 
