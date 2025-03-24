@@ -57,5 +57,22 @@ def meeting_view(request, meeting_id):
     return render(request, 'meetings/view.html', {'meeting': meeting})
 
 @login_required
-def meeting_create(request):
+def create_meeting(request):
     render(request, 'meetings/create.html')
+
+@login_required
+def edit_meeting(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    if request.user != meeting.organiser:
+        raise Http404("You do not have permission to edit this meeting.")
+    
+    if request.method == 'POST':
+        meeting.description = request.POST.get('description')
+        meeting.start_time = request.POST.get('start_time')
+        meeting.end_time = request.POST.get('end_time')
+        meeting.place = request.POST.get('place')
+        meeting.save()
+
+        return redirect('view',meeting_id=meeting.pk)
+    else:
+        return render(request, 'meetings/edit.html', {'meeting': meeting})
