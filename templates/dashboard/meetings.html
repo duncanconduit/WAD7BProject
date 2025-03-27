@@ -2,7 +2,7 @@
 {% block title_block %}Meetings{% endblock %}
 {% block body_block %}
     <h1>Meetings</h1>
-    <head><script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <head>
     </head>
     <a href="{% url 'dashboard:calendar' %}">View Calendar</a>
     <a href="{% url 'meetings:create' %}">Create Meeting</a>
@@ -17,19 +17,12 @@
     <script>
         function initMap() {
             var meetingData = JSON.parse('{{ meetings|safe }}'); 
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: { lat: 0, lng: 0 } 
-            });
+            
     
             meetingData.forEach(meeting => {
                 if (meeting.place__latitude && meeting.place__longitude) {
                     var position = { lat: meeting.place__latitude, lng: meeting.place__longitude };
-                    new google.maps.Marker({
-                        position: position,
-                        map: map,
-                        title: meeting.description
-                    });
+                    
                 }
             });
         }
