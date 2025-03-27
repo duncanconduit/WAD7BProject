@@ -1,30 +1,25 @@
-{% extends 'dashboard/base.html' %}
-{% load static %}
-
-{% block title_block %}
-Meeting Calendar
-{% endblock %}
+{% extends 'base.html' %}
 
 {% block body_block %}
-    <h1>Meeting Calendar</h1>
     <div id="calendar"></div>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
-
+    {{ events|json_script:"events-data" }}
     <script>
         $(document).ready(function() {
+
+            var events = JSON.parse(document.getElementById('events-data').textContent);
+            console.log(events);
             $('#calendar').fullCalendar({
-                events: "{% url 'meetings:get_meetings' %}", 
+                events: events,
                 eventClick: function(event) {
                     alert('Meeting: ' + event.title + 
                           '\nDate: ' + event.start.format('YYYY-MM-DD HH:mm') +
                           '\nLocation: ' + (event.location || 'No location'));
-                }
+                },
+                timeFormat: 'HH:mm',
             });
         });
     </script>
+
 {% endblock %}
+

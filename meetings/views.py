@@ -28,10 +28,12 @@ def calendar_view(request):
     ]
 
     context = {
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
+        "events": events
     }
 
-    return JsonResponse(events, safe=False)
+    return render(request, 'meetings/calendar.html', context)
+
 
 # optional additional view to fetch all meetings, if needed for other purposes
 def get_meetings(request):
