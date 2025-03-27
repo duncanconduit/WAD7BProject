@@ -33,16 +33,7 @@ module.exports = {
     dark_important: '#84484b'
     },
     boxShadow: {
-    'brand-glow': '0 0 12px rgba(59,130,246,0.6)',
-    },
-    animation: {
-    glow: 'glow 2s ease-in-out infinite alternate',
-    },
-    keyframes: {
-    glow: {
-      '0%': { boxShadow: '0 0 8px rgba(59,130,246,0.6)' },
-      '100%': { boxShadow: '0 0 20px rgba(59,130,246,0.4)' },
-    },
+      'brand-glow': '0 0 18px rgba(51, 57, 241, 0.4)',
     },
     fontFamily: {
     marlinSquare: ['MarlinSoftSquare', 'sans-serif'],
