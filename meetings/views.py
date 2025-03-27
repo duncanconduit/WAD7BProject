@@ -9,6 +9,8 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.utils.dateparse import parse_datetime
+from meetings.models import Meeting, Place
 
 # view to display meetings as events for calendar api
 def calendar_view(request):
@@ -58,7 +60,7 @@ def meeting_view(request, meeting_id):
 
 @login_required
 def create_meeting(request):
-    render(request, 'meetings/create.html')
+    return render(request, 'meetings/create.html')
 
 @login_required
 def edit_meeting(request, meeting_id):
@@ -68,9 +70,10 @@ def edit_meeting(request, meeting_id):
     
     if request.method == 'POST':
         meeting.description = request.POST.get('description')
-        meeting.start_time = request.POST.get('start_time')
-        meeting.end_time = request.POST.get('end_time')
-        meeting.place = request.POST.get('place')
+        meeting.start_time = parse_datetime(request.POST.get('start_time'))
+        meeting.end_time = parse_datetime(request.POST.get('end_time'))
+        place_id = request.POST.get('place')
+        meeting.place = Place.objects.get(pk=place_id) if place_id else None
         meeting.save()
 
         return redirect('view',meeting_id=meeting.pk)
