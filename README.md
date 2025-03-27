@@ -33,3 +33,10 @@ pip install -r requirements.txt
     ```
 
 If you prefer not to use the Tailwind watcher, simply omit or remove the `.env` file (or set `TAILWIND_WATCHER=False`).
+
+## External Sources
+
+Tailwind CSS used for better styling of the site.
+Zoom API used for users to join virtual meetings.
+Google Maps API used to show users where meetings are.
+FullCalendar API used to display users upcoming or past meetings.

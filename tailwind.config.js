@@ -45,10 +45,7 @@ module.exports = {
     },
     },
     fontFamily: {
-    marlin: ['MarlinSoft', 'sans-serif'],
-    marlinSlant: ['MarlinSoftSlant', 'sans-serif'],
     marlinSquare: ['MarlinSoftSquare', 'sans-serif'],
-    marlinSquareSlant: ['MarlinSoftSquareSlant', 'sans-serif'],
     },
   },
   },

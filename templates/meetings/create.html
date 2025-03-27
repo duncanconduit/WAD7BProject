@@ -2,7 +2,7 @@
 {% block title_block %}Create Meeting{% endblock %}
 {% block body_block %}
 <h1>Create a New Meeting</h1>
-<form method="post" action="{% url 'meetings:create' %}">
+<form method="post" action="{% url 'meetings:create_meeting' %}">
     {% csrf_token %}
     <label for="description">Description:</label>
     <input type="text" id="description" name="description" required>
@@ -22,6 +22,4 @@
 
     <button type="submit">Create Meeting</button>
 </form>
-
-<a href="{% url 'meetings:list' %}">Back to Meetings</a>
 {% endblock %}
