@@ -2,7 +2,7 @@
     <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="{{ class }} object-cover">
 {% else %}
 <div class="{{ class }} font-marlin font-medium {{ user.get_avatar_colour }} flex items-center justify-center">
-    <span class="text-white">
+    <span class="text-white pt-1">
         {{ user.first_name|slice:":1"|default:""|upper }}{{ user.last_name|slice:":1"|default:""|upper }}
     </span>
 </div>
