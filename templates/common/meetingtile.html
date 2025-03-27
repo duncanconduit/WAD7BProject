@@ -25,23 +25,14 @@
         Loading...
       </p>
     </div>
-    <div class="dropdown relative">
-      <button
-        type="button" data-target="dropdown-default"
+    <div>
+      <a
+        href="{% url 'meetings:view_meeting' meeting_id=meeting.meeting_id %}"
         class="flex items-center justify-center rounded-full px-2 py-1
-               text-sm font-semibold text-black hover:text-purple-600"
+               text-sm font-semibold text-brand-primary hover:text-purple-600"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg" width="12"
-          height="4" fill="none"
-          viewBox="0 0 12 4"
-        >
-          <path
-            d="M1.85624 2.00085H1.81458M6.0343 2.00085H5.99263M10.2124 2.00085H10.1707"
-            stroke="currentcolor" stroke-width="2.5" stroke-linecap="round"
-          />
-        </svg>
-      </button>
+        View
+      </a>
     </div>
   </div>
 

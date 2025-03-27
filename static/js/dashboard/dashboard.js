@@ -132,8 +132,17 @@ function groupDynamicMeetings() {
     const diffToMonday = (day === 0 ? 1 : (8 - day));
     const nextMonday = new Date(now);
     nextMonday.setDate(now.getDate() + diffToMonday);
+    // Set to beginning of the day
+    nextMonday.setHours(0, 0, 0, 0);
+    
+    // Create end of this week (Sunday at 23:59:59.999)
+    const endOfThisWeek = new Date(nextMonday);
+    endOfThisWeek.setDate(endOfThisWeek.getDate() - 1);
+    endOfThisWeek.setHours(23, 59, 59, 999);
+    
     const endNextWeek = new Date(nextMonday);
     endNextWeek.setDate(nextMonday.getDate() + 6);
+    endNextWeek.setHours(23, 59, 59, 999);
 
     const groups = {
         "Rest of This Week": [],
@@ -149,12 +158,14 @@ function groupDynamicMeetings() {
         const meetingTime = new Date(Number(meetingUnix) * 1000);
         if (meetingTime <= now) return;
 
-        if (meetingTime < nextMonday) {
+        if (meetingTime <= endOfThisWeek) {
             groups["Rest of This Week"].push(tile);
-        } else if (meetingTime >= nextMonday && meetingTime <= endNextWeek) {
+        } else if (meetingTime <= endNextWeek) {
             const weekday = meetingTime.getDay();
             if (weekday >= 1 && weekday <= 3) {
                 groups["Early Next Week"].push(tile);
+            } else if (weekday >= 4 && weekday <= 6) {
+                groups["Later Next Week"].push(tile);
             } else {
                 groups["Later Next Week"].push(tile);
             }

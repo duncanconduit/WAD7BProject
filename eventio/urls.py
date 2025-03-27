@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('accounts/', include('accounts.urls')),
     path('meetings/', include('meetings.urls')),
+    path('meeting/<uuid:meeting_id>', RedirectView.as_view(pattern_name='view_meeting', permanent=True)),
     path('login/', RedirectView.as_view(url='/accounts/login/', permanent=True)),
     path('logout/', RedirectView.as_view(url='/accounts/logout/', permanent=True)),
     path('about/', views.about, name='about'),
