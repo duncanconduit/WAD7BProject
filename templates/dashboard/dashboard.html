@@ -18,8 +18,8 @@ dashboard
 			Dashboard
 		</h2>
 		<div class="flex gap-4">
-			<p class="hover:text-brand-light transition-colors font-medium">Create Event</p>
-			<p class="hover:text-brand-light transition-colors font-medium">View All</p>
+			<a href={% url 'meetings:create_meeting' %} class="hover:text-brand-light transition-colors font-medium">Create Event</a>
+			<a class="hover:text-brand-light transition-colors font-medium">View All</a>
 		</div>
 	</div>
 	<div class="py-4">

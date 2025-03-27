@@ -1,298 +1,19 @@
 /* ====================================================
-   MarlinSoft Regular (Normal) Fonts
-   ==================================================== */
-
-/* Thin (100) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: normal;
-}
-
-/* Extra Light (200) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: normal;
-}
-
-/* Light (300) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-}
-
-/* Book (400 - also used as Regular) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Regular (400) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Medium (500) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-}
-
-/* Bold (700) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-}
-
-/* Extra Bold (800) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-extra-bold.otf") format("opentype");
-  font-weight: 800;
-  font-style: normal;
-}
-
-/* Black (900) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: normal;
-}
-
-/* Extra Black (950) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: normal;
-}
-
-
-/* ====================================================
-   MarlinSoft Italic Fonts
-   ==================================================== */
-
-/* Thin Italic (100) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: italic;
-}
-
-/* Extra Light Italic (200) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: italic;
-}
-
-/* Light Italic (300) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-light.otf") format("opentype");
-  font-weight: 300;
-  font-style: italic;
-}
-
-/* Book Italic (400) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-}
-
-/* Regular Italic (400) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-}
-
-/* Medium Italic (500) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: italic;
-}
-
-/* Bold Italic (700) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: italic;
-}
-
-/* Extra Bold Italic (800) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-extra-bold.otf") format("opentype");
-  font-weight: 800;
-  font-style: italic;
-}
-
-/* Black Italic (900) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: italic;
-}
-
-/* Extra Black Italic (950) */
-@font-face {
-  font-family: "MarlinSoft";
-  src: url("/static/fonts/marlin-soft-italic-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: italic;
-}
-
-
-/* ====================================================
-   MarlinSoft Slant Fonts (using oblique style)
-   ==================================================== */
-
-/* Slant Thin (100) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: oblique;
-}
-
-/* Slant Extra Light (200) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: oblique;
-}
-
-/* Slant Light (300) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-light.otf") format("opentype");
-  font-weight: 300;
-  font-style: oblique;
-}
-
-/* Slant Book (400) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: oblique;
-}
-
-/* Slant Regular (400) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: oblique;
-}
-
-/* Slant Medium (500) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: oblique;
-}
-
-/* Slant Bold (700) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: oblique;
-}
-
-/* Slant Extra Bold (800) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-extra-bold.otf") format("opentype");
-  font-weight: 800;
-  font-style: oblique;
-}
-
-/* Slant Black (900) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: oblique;
-}
-
-/* Slant Extra Black (950) */
-@font-face {
-  font-family: "MarlinSoftSlant";
-  src: url("/static/fonts/marlin-soft-slant-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: oblique;
-}
-
-
-/* ====================================================
    MarlinSoft Square Fonts
    ==================================================== */
-
-/* Square Thin (100) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: normal;
-}
-
-/* Square Extra Light (200) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: normal;
-}
 
 /* Square Light (300) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-light.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-Light.woff2") format("woff2");
   font-weight: 300;
-  font-style: normal;
-}
-
-/* Square Book (400) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-book.otf") format("opentype");
-  font-weight: 400;
   font-style: normal;
 }
 
 /* Square Regular (400) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-regular.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
@@ -300,7 +21,7 @@
 /* Square Medium (500) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-medium.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
 }
@@ -308,7 +29,7 @@
 /* Square Bold (700) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-bold.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
 }
@@ -316,7 +37,7 @@
 /* Square Extra Bold (800) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-extra-bold.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
 }
@@ -324,177 +45,7 @@
 /* Square Black (900) */
 @font-face {
   font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-black.otf") format("opentype");
+  src: url("/static/fonts/MarlinSoftSQ-Light.woff2") format("woff2");
   font-weight: 900;
   font-style: normal;
-}
-
-/* Square Extra Black (950) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: normal;
-}
-
-
-/* ====================================================
-   MarlinSoft Square Italic Fonts
-   ==================================================== */
-
-/* Square Thin Italic (100) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: italic;
-}
-
-/* Square Extra Light Italic (200) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: italic;
-}
-
-/* Square Light Italic (300) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-light.otf") format("opentype");
-  font-weight: 300;
-  font-style: italic;
-}
-
-/* Square Book Italic (400) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-}
-
-/* Square Regular Italic (400) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-}
-
-/* Square Medium Italic (500) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: italic;
-}
-
-/* Square Bold Italic (700) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: italic;
-}
-
-/* Square Extra Bold Italic (800) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-extra-bold.otf") format("opentype");
-  font-weight: 800;
-  font-style: italic;
-}
-
-/* Square Black Italic (900) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: italic;
-}
-
-/* Square Extra Black Italic (950) */
-@font-face {
-  font-family: "MarlinSoftSquare";
-  src: url("/static/fonts/marlin-soft-sq-italic-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: italic;
-}
-
-
-/* ====================================================
-   MarlinSoft Square Slant Fonts (using oblique style)
-   ==================================================== */
-
-/* Square Slant Thin (100) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-thin.otf") format("opentype");
-  font-weight: 100;
-  font-style: oblique;
-}
-
-/* Square Slant Extra Light (200) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-extra-light.otf") format("opentype");
-  font-weight: 200;
-  font-style: oblique;
-}
-
-/* Square Slant Light (300) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-light.otf") format("opentype");
-  font-weight: 300;
-  font-style: oblique;
-}
-
-/* Square Slant Book (400) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: oblique;
-}
-
-/* Square Slant Medium (500) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: oblique;
-}
-
-/* Square Slant Bold (700) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: oblique;
-}
-
-/* Square Slant Extra Bold (800) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-extra-bold.otf") format("opentype");
-  font-weight: 800;
-  font-style: oblique;
-}
-
-/* Square Slant Black (900) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: oblique;
-}
-
-/* Square Slant Extra Black (950) */
-@font-face {
-  font-family: "MarlinSoftSquareSlant";
-  src: url("/static/fonts/marlin-soft-sq-slant-extra-black.otf") format("opentype");
-  font-weight: 950;
-  font-style: oblique;
 }

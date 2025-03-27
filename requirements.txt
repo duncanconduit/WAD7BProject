@@ -1,3 +1,4 @@
 Django==5.1.6
 dotenv==0.9.9
 pytz
+pillow

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from .helpers import AVATAR_GRADIENTS, get_random_avatar_colour
+from .helpers import AVATAR_COLOURS, get_random_avatar_colour
 import uuid
 
 class Organisation(models.Model):
@@ -57,6 +57,5 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     @property
-    def avatar_gradient(self):
-        print(AVATAR_GRADIENTS.get(self.avatar_colour, 'bg-neutral-500'))
-        return AVATAR_GRADIENTS.get(self.avatar_colour, 'bg-neutral-500')
+    def get_avatar_colour(self):
+        return AVATAR_COLOURS.get(self.avatar_colour, 'bg-neutral-500')
