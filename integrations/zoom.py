@@ -29,7 +29,7 @@ def get_zoom_access_token():
     token = response.json()["access_token"]
     return token
 
-def create_zoom_meeting(credentials_file, topic, agenda, start_time, duration, time_zone, max_participants):
+def create_zoom_meeting(topic, agenda, start_time, duration, time_zone, max_participants):
     """
     Creates a Zoom scheduled meeting using a server-to-server OAuth app.
     
@@ -114,7 +114,6 @@ if __name__ == "__main__":
     print(f"Creating Zoom meeting scheduled to start at {start_time} for {duration} minutes")
     
     zoom_meeting = create_zoom_meeting(
-        credentials_file=credentials_file,
         topic='Bot-Created Zoom Meeting',
         agenda='A meeting created by a bot.',
         start_time=start_time,

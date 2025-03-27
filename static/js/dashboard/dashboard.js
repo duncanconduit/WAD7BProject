@@ -101,15 +101,30 @@ function formatEventTime(unixStart, unixEnd) {
     } else if (eventDay.getTime() === tomorrow.getTime()) {
         dateStr = "Tomorrow";
     } else {
-        const days = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"];
-        const dayName = days[startDate.getDay()];
-        const dateNumber = startDate.getDate();
-        const monthAbbrev = startDate.toLocaleString('en-GB', { month: 'short', timeZone: 'Europe/London' });
-        dateStr = `${dayName} ${dateNumber} ${monthAbbrev}`;
-        if (startDate.getFullYear() !== now.getFullYear()) {
-            dateStr += ` ${startDate.getFullYear()}`;
+        // Calculate the next occurrence of the event's weekday
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const eventDayOfWeek = startDate.getDay();
+        const todayDayOfWeek = today.getDay();
+        
+        const daysToNext = (eventDayOfWeek - todayDayOfWeek + 7) % 7;
+        const nextOccurrence = new Date(today);
+        nextOccurrence.setDate(today.getDate() + (daysToNext === 0 ? 7 : daysToNext));
+        
+        if (eventDay.getTime() === nextOccurrence.getTime()) {
+            // This is the next occurrence of this weekday
+            dateStr = days[eventDayOfWeek]
+        } else {
+            // Regular date format
+            const dayAbbrev = days[eventDayOfWeek].substring(0, 3);
+            const dateNumber = startDate.getDate();
+            const monthAbbrev = startDate.toLocaleString('en-GB', { month: 'short', timeZone: 'Europe/London' });
+            dateStr = `${dayAbbrev} ${dateNumber} ${monthAbbrev}`;
+            if (startDate.getFullYear() !== now.getFullYear()) {
+                dateStr += ` ${startDate.getFullYear()}`;
+            }
         }
     }
+    
     const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/London' };
     const startTimeStr = startDate.toLocaleTimeString('en-GB', timeOptions);
     const endTimeStr = endDate.toLocaleTimeString('en-GB', timeOptions);

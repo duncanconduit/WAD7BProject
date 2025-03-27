@@ -138,15 +138,20 @@ def create_meetings(users, places):
         # Randomly choose a meeting place.
         place = random.choice(place_list)
         
+        # Randomly decide if meeting is virtual (30% chance)
+        is_virtual = random.random() < 0.3
+        
         meeting = Meeting.objects.create(
             description=desc,
-            start_time=start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-            end_time=end_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            start_time=start_datetime,
+            end_time=end_datetime,
             organiser=organiser,
-            place=place
+            place=place,
+            is_virtual=is_virtual
         )
+            
         meeting_objects[desc] = meeting
-        print(f"Created meeting: {meeting.description} organised by {organiser.email} at {place.name}")
+        print(f"Created meeting: {meeting.description} organised by {organiser.email} at {place.name} (Virtual: {is_virtual})")
     return meeting_objects
 
 def create_invitations(users, meeting_objects):

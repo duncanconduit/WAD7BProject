@@ -155,36 +155,49 @@
     <!-- Location info gets its own flex item (flex-auto) -->
     <!-- If the container is wide, it sits on the same row; if not, it wraps below. -->
     <div class="flex-auto flex items-center gap-1">
-      <!-- <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="h-5 w-5 text-gray-500"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-        />
-      </svg> -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 87.5 72" class="h-5 w-5 text-gray-500">
-        <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z"/>
-        <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z"/>
-        <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z"/>
-        <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z"/>
-        <path fill="#00ac47" d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"/>
-        <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/>
-    </svg>
-      <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
-        {{ meeting.place|default:"No location specified" }}
-      </p>
+      {% if meeting.is_virtual %}
+        <a 
+          href="{{ meeting.zoom_meeting.url }}"
+          class="flex-auto flex items-center gap-1"
+          aria-label="Join virtual meeting via Zoom">
+          
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" viewBox="0 0 48 48" 
+            class="h-5 w-5 text-gray-500" 
+            role="img" 
+            aria-labelledby="zoomIconTitle">
+            <title id="zoomIconTitle">Zoom Meeting Icon</title>
+            <circle cx="24" cy="24" r="20" fill="#2196f3"></circle>
+            <path fill="#fff" d="M29,31H14c-1.657,0-3-1.343-3-3V17h15c1.657,0,3,1.343,3,3V31z"></path>
+            <polygon fill="#fff" points="37,31 31,27 31,21 37,17"></polygon>
+          </svg>
+          <p class="text-sm text-gray-600 dark:text-gray-400 truncate flex items-center gap-1">
+            Meeting Link <span class="font-medium text-[#4a8af7] inline-block rounded-md bg-gray-200 px-2 py-0.5">/{{ meeting.zoom_meeting.id }}</span>
+          </p>
+        </a>
+      {% else %}
+        <div class="flex-auto flex items-center gap-1" aria-label="Meeting location">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="h-5 w-5 text-gray-500" 
+            role="img" 
+            aria-labelledby="locationIconTitle">
+            <title id="locationIconTitle">Location Icon</title>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+          </svg>
+          
+          <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
+            {{ meeting.place|default:"No location specified" }}
+          </p>
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>
