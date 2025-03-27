@@ -62,42 +62,6 @@ class MeetingsTestCase(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
         self.assertRedirects(response, '/accounts/login/?next=' + reverse("meetings:view_meeting", args=[str(self.meeting.pk)]))
 
-    # def test_meeting_view_access(self):
-    #     """Test that an invited user can view a meeting"""
-    #     self.client.login(username="user2", password="testpass")  # Ensure user is logged in
-    #     response = self.client.get(reverse("meetings:view_meeting", args=[self.meeting.pk]))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "Test Meeting")  # Check if meeting title is in the response
-
-
-    # def test_create_meeting_view(self):
-    #     """Test meeting creation view (GET request)"""
-    #     self.client.login(username="user1", password="testpass")  # Ensure user is logged in
-    #     response = self.client.get(reverse("meetings:create_meeting"))
-    #     self.assertEqual(response.status_code, 200)
-
-    # def test_edit_meeting_view(self):
-    #     """Test editing a meeting as the organiser"""
-    #     self.client.login(username="user1", password="testpass")
-    #     response = self.client.post(reverse("meetings:edit_meeting", args=[self.meeting.pk]), {
-    #         "description": "Updated Meeting",
-    #         "start_time": (now() + timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S'),
-    #         "end_time": (now() + timedelta(days=2, hours=1)).strftime('%Y-%m-%d %H:%M:%S'),
-    #         "place": self.place.pk
-    #     })
-    #     self.assertEqual(response.status_code, 302)  # Redirect on success
-    #     self.meeting.refresh_from_db()
-    #     self.assertEqual(self.meeting.description, "Updated Meeting")  # Check if the description was updated
-
-
-    # def test_edit_meeting_restricted(self):
-    #     """Test that a non-organiser cannot edit a meeting"""
-    #     self.client.login(username="user2", password="testpass")
-    #     response = self.client.post(reverse("meetings:edit_meeting", args=[self.meeting.pk]), {
-    #         "description": "Hacked Meeting"
-    #     })
-    #     self.assertEqual(response.status_code, 403)  # Should return 403 Forbidden for non-organisers
-
     def test_api_meetings(self):
         """Test fetching meetings through API"""
         response = self.client.get(reverse("meetings:get_meetings"))
