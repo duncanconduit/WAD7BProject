@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 import uuid
+from django.core.exceptions import ValidationError
 
 class Place(models.Model):
     place_id = models.AutoField(primary_key=True)
@@ -33,24 +34,19 @@ class Meeting(models.Model):
     end_time = models.DateTimeField()
     organiser = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organised_meetings')
     place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True, blank=True)
+    zoom_meeting = models.OneToOneField(ZoomMeeting, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.description} on {self.start_time.strftime('%Y-%m-%d %H:%M')}"
 
-    def get_confirmed_attendees(self, exclude_user=None, include_organiser=False):
-        attendees = User.objects.filter(
-            invitations__meeting=self,
-            invitations__status=True
-        )
-        
-        if include_organiser:
-            organiser_qs = User.objects.filter(id=self.organiser.id)
-            attendees = (attendees | organiser_qs).distinct()
-        
-        if exclude_user:
-            attendees = attendees.exclude(id=exclude_user.id)
-            
-        return attendees
+    def clean(self):
+        # Ensure that either a place or a Zoom meeting is provided
+        if not self.place and not self.zoom_meeting:
+            raise ValidationError("A meeting must have either a place or a Zoom meeting.")
+
+    def save(self, *args, **kwargs):
+        self.clean()  # Perform validation
+        super().save(*args, **kwargs)  # Call the original save method
     
 class Invitation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invitations')
