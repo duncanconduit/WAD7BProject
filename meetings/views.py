@@ -37,7 +37,6 @@ def calendar_view(request):
     ]
 
     context = {
-        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
         "events": events
     }
 
