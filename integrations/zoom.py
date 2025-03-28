@@ -72,12 +72,12 @@ def create_zoom_meeting(topic, agenda, start_time, duration, time_zone, max_part
     meeting = response.json()
     return meeting
 
-def update_zoom_meeting(credentials_file, meeting_id, topic=None, agenda=None, start_time=None, duration=None, time_zone=None):
+def update_zoom_meeting(meeting_id, topic=None, agenda=None, start_time=None, duration=None, time_zone=None):
     """
     Updates a Zoom meeting using a server-to-server OAuth app.
     Only fields that are provided will be updated.
     """
-    token = get_zoom_access_token(credentials_file)
+    token = get_zoom_access_token()
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -98,40 +98,4 @@ def update_zoom_meeting(credentials_file, meeting_id, topic=None, agenda=None, s
 
     response = requests.patch(url, json=payload, headers=headers)
     response.raise_for_status()
-    # Zoom returns an empty response body on a successful update so we return the status code.
     return response.status_code
-
-# Example usage:
-if __name__ == "__main__":
-    credentials_file = 'zoom_credentials.json'  # Replace with your credentials file containing Zoom app details
-    
-    # Define meeting start time in London time zone (tomorrow) and duration in minutes
-    london_tz = pytz.timezone('Europe/London')
-    start_time_dt = (datetime.now(london_tz) + timedelta(days=1)).replace(microsecond=0)
-    start_time = start_time_dt.isoformat()
-    duration = 100  # Meeting duration in minutes
-    
-    print(f"Creating Zoom meeting scheduled to start at {start_time} for {duration} minutes")
-    
-    zoom_meeting = create_zoom_meeting(
-        topic='Bot-Created Zoom Meeting',
-        agenda='A meeting created by a bot.',
-        start_time=start_time,
-        duration=duration,
-        time_zone='Europe/London',
-        max_participants=10,  # For reference; actual participant limits are set by your Zoom plan.
-    )
-    
-    print(f"Zoom meeting join link: {zoom_meeting.get('join_url')}")
-    print(f"Meeting ID: {zoom_meeting.get('id')}")
-    print(f"Meeting created at: {zoom_meeting.get('created_at')}")
-    
-    # Example of updating the meeting (e.g., changing the topic/agenda)
-    # meeting_id = zoom_meeting.get('id')
-    # update_status = update_zoom_meeting(
-    #     credentials_file=credentials_file,
-    #     meeting_id=meeting_id,
-    #     topic="Updated Bot-Created Zoom Meeting",
-    #     agenda="Updated agenda for the meeting."
-    # )
-    # print(f"Update status code: {update_status}")

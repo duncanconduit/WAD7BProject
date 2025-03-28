@@ -32,10 +32,50 @@ document.addEventListener('DOMContentLoaded', function () {
     if (endTimeInput.value) touchedFields.end_time = true;
     if (placeInput.value) touchedFields.place = true;
     
+    // Track if the form has been modified from its original state
+    let formModified = false;
+    
+    // Store original values for comparison
+    const originalValues = {
+        description: descriptionInput.value.trim(),
+        start_time: startTimeInput.value,
+        end_time: endTimeInput.value,
+        is_virtual: virtualRadio.checked,
+        place: placeInput.value,
+        invitations: [] // We'll track removed invitations separately
+    };
+    
     window.markAsTouched = function(fieldName) {
         touchedFields[fieldName] = true;
+        checkFormModified();
         validateForm();
     };
+    
+    // Function to check if the form has been modified
+    function checkFormModified() {
+        // Check if any field has changed from its original value
+        if (descriptionInput.value.trim() !== originalValues.description ||
+            startTimeInput.value !== originalValues.start_time ||
+            endTimeInput.value !== originalValues.end_time ||
+            virtualRadio.checked !== originalValues.is_virtual ||
+            placeInput.value !== originalValues.place ||
+            invitationsToRemove.length > 0 ||
+            document.querySelectorAll('.invite-input').length > 1 ||
+            (document.querySelector('.invite-input') && document.querySelector('.invite-input').value.trim() !== '')) {
+            
+            formModified = true;
+        } else {
+            formModified = false;
+        }
+        
+        // Update submit button state based on form validity AND modification
+        updateSubmitButtonState();
+    }
+    
+    function updateSubmitButtonState() {
+        // Enable submit if the form is valid AND modified
+        submitButton.disabled = !(isFormValid && formModified);
+    }
     
     // Handle meeting type selection change
     function handleMeetingTypeChange() {
@@ -57,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
             placeInput.required = true;
         }
         
+        checkFormModified();
         validateForm();
     }
     
@@ -71,12 +112,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 invitationsToRemove.push(invitationId);
                 removeInvitationsInput.value = invitationsToRemove.join(',');
                 this.closest('div').remove();
+                
+                // Mark form as modified since we removed an invitation
+                checkFormModified();
+                validateForm();
             }
         });
     });
     
+    // Keep track of form validity separately
+    let isFormValid = true;
+    
     function validateForm() {
-        let isValid = true;
+        isFormValid = true;
         const descriptionValue = descriptionInput.value.trim();
         const startTimeValue = startTimeInput.value;
         const endTimeValue = endTimeInput.value;
@@ -86,23 +134,23 @@ document.addEventListener('DOMContentLoaded', function () {
         // Reset all error states
         resetErrors();
         
-        // Always check these fields for submit button state, but only show errors if touched
+        // Always check these fields for form validity, but only show errors if touched
         if (!descriptionValue) {
-            isValid = false;
+            isFormValid = false;
             if (touchedFields.description) {
                 showError(descriptionInput, 'description-error-label', 'Please provide a meeting description.');
             }
         }
         
         if (!startTimeValue) {
-            isValid = false;
+            isFormValid = false;
             if (touchedFields.start_time) {
                 showError(startTimeInput, 'start-time-error-label', 'Please select a start time.');
             }
         }
         
         if (!endTimeValue) {
-            isValid = false;
+            isFormValid = false;
             if (touchedFields.end_time) {
                 showError(endTimeInput, 'end-time-error-label', 'Please select an end time.');
             }
@@ -113,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const startDate = new Date(startTimeValue);
             const endDate = new Date(endTimeValue);
             if (endDate <= startDate) {
-                isValid = false;
+                isFormValid = false;
                 if (touchedFields.end_time) {
                     showError(endTimeInput, 'end-time-error-label', 'End time must be after start time.');
                 }
@@ -122,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Only validate place for in-person meetings
         if (!isVirtual && !placeValue) {
-            isValid = false;
+            isFormValid = false;
             if (touchedFields.place) {
                 showError(placeInput, 'place-error-label', 'Please select a place for the meeting.');
             }
@@ -135,14 +183,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (email && !isValidEmail(email)) {
                 inviteError.textContent = 'Please enter valid email addresses.';
                 inviteError.classList.remove('hidden');
-                isValid = false;
+                isFormValid = false;
             }
         });
         
-        // Update submit button state
-        submitButton.disabled = !isValid;
+        // Update submit button state based on both validity and modification
+        updateSubmitButtonState();
         
-        return isValid;
+        return isFormValid;
     }
     
     function isValidEmail(email) {
@@ -209,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         
         field.el.addEventListener('input', function() {
+            checkFormModified();
             validateForm();
         });
     });
@@ -223,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 placeholder="Enter email address">
             <button type="button" class="remove-invite ml-2 text-gray-400 hover:text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 111.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 010-1.414z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 011.414 0L10 8.586l4.293-4.293a1 1 111.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </button>
         `;
@@ -233,20 +282,31 @@ document.addEventListener('DOMContentLoaded', function () {
         const removeButton = newInviteGroup.querySelector('.remove-invite');
         removeButton.addEventListener('click', function() {
             invitesContainer.removeChild(newInviteGroup);
+            checkFormModified();
             validateForm();
         });
         
         const newInput = newInviteGroup.querySelector('input');
         newInput.focus();
         
-        // Add validation for the new input
-        newInput.addEventListener('input', validateForm);
+        // Add validation and change detection for the new input
+        newInput.addEventListener('input', function() {
+            checkFormModified();
+            validateForm();
+        });
         newInput.addEventListener('blur', validateForm);
+        
+        // Adding a new invite field is a form modification
+        checkFormModified();
+        validateForm();
     });
     
-    // Reset errors on load but still validate form
+    // Reset errors on load but still check form state
     resetErrors();
     validateForm();
+    
+    // Initially the form is unmodified, so disable submit
+    submitButton.disabled = true;
     
     // Add this new function to normalize the datetime format
     function formatDatetimeForSubmission(datetimeValue) {

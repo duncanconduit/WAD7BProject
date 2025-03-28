@@ -24,6 +24,9 @@ function updateMeetingTimes() {
     const dateStr = formatEventDate(unixStart);
     dateEl.textContent = dateStr;
     
+    startTimeEl.textContent = format24HourTime(unixStart);
+    endTimeEl.textContent = format24HourTime(unixEnd);
+    
     const duration = calculateDuration(unixStart, unixEnd);
     durationEl.textContent = `Duration: ${duration}`;
     
@@ -31,6 +34,14 @@ function updateMeetingTimes() {
     if (statusBadge && statusBadge.dataset.status === 'upcoming') {
         startCountdown(unixStart);
     }
+}
+
+function format24HourTime(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${hours}:${minutes}`;
 }
 
 function formatEventDate(unixTimestamp) {
