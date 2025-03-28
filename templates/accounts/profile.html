@@ -7,7 +7,6 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/accounts/register.css' %}" />
-<script src="{% static 'js/accounts/register.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -16,116 +15,123 @@
 <div class="mx-auto text-left align-left items-left">
     <form id="profile-form" method="post" action="{% url 'accounts:profile' %}" enctype="multipart/form-data">
         {% csrf_token %}
-  <div class="edit-item flex space-x-4 mt-2 md:mt-0">
-    <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
-      <input
-        type="text"
-        name="first-name"
-        required
-        placeholder=" "
-        value="{{ user.first_name }}"
-        class="floating-input block w-full px-4 pt-4 pb-3 border border-inputborder rounded-md focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"
-      />
-      <label
-        for="first-name"
-        class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base"
-      >
-        First Name
-      </label>
-    </div>
-    <a href="#" class="edit-button flex items-center pb-3">
-      <svg
-        class="edit-icon w-6 h-6 transition-all duration-200"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-        />
-      </svg>
-      <svg
-        class="cancel-icon hidden w-6 h-6 transition-all duration-200 text-red-500"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="save-icon hidden w-6 h-6 transition-all duration-200 text-green-500 pl-1">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-      </svg>
-      
-    </a>
-  </div>
-        <!-- Group 1: Last Name -->
-<div class="edit-item flex space-x-4 mt-2 md:mt-0">
-    <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
-      <input
-        type="text"
-        name="last-name"
-        required
-        placeholder=" "
-        value="{{ user.last_name }}"
-        class="floating-input block w-full px-4 pt-4 pb-3 border border-inputborder rounded-md focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"
-      />
-      <label
-        for="last-name"
-        class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base"
-      >
-        Last Name
-      </label>
-    </div>
-    <!-- Action icons container -->
-    <a href="#" class="edit-button flex items-center pb-3">
-      <!-- Edit Icon (shown initially) -->
-      <svg
-        class="edit-icon w-6 h-6 transition-all duration-200"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-        />
-      </svg>
-      <!-- Cancel Icon (hidden initially) -->
-      <svg
-        class="cancel-icon hidden w-6 h-6 transition-all duration-200"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-      <!-- Save Icon (hidden initially) -->
-      <svg
-        class="save-icon hidden w-6 h-6 transition-all duration-200"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-      </svg>
-    </a>
-  </div>
+        
+        <!-- First Name Field -->
+        <div class="edit-item flex space-x-4 mt-2 md:mt-0" data-field="first_name">
+            <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+                <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    required
+                    placeholder=" "
+                    value="{{ user.first_name }}"
+                    disabled
+                    class="floating-input block w-full px-4 pt-4 pb-3 border border-inputborder rounded-md focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"
+                />
+                <label
+                    for="first_name"
+                    class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base"
+                >
+                    First Name
+                </label>
+            </div>
+            <a href="#" class="edit-button flex items-center pb-3">
+                <svg
+                    class="edit-icon w-6 h-6 transition-all duration-200"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                >
+                    <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    />
+                </svg>
+                <svg
+                    class="cancel-icon hidden w-6 h-6 transition-all duration-200 text-red-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <svg 
+                    class="save-icon hidden w-6 h-6 transition-all duration-200 text-green-500 pl-1"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke-width="1.5" 
+                    stroke="currentColor"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Last Name Field -->
+        <div class="edit-item flex space-x-4 mt-2 md:mt-0" data-field="last_name">
+            <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
+                <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    required
+                    placeholder=" "
+                    value="{{ user.last_name }}"
+                    disabled
+                    class="floating-input block w-full px-4 pt-4 pb-3 border border-inputborder rounded-md focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"
+                />
+                <label
+                    for="last_name"
+                    class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base"
+                >
+                    Last Name
+                </label>
+            </div>
+            <a href="#" class="edit-button flex items-center pb-3">
+                <svg
+                    class="edit-icon w-6 h-6 transition-all duration-200"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                >
+                    <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    />
+                </svg>
+                <svg
+                    class="cancel-icon hidden w-6 h-6 transition-all duration-200 text-red-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <svg
+                    class="save-icon hidden w-6 h-6 transition-all duration-200 text-green-500 pl-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </a>
+        </div>
   
-  <!-- You can replicate this pattern for additional items as needed -->
-
         <!-- Email Field (Display-only) -->
         <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
             <div class="block px-4 py-4 border border-inputborder rounded-md
@@ -142,57 +148,136 @@
         <!-- Profile Picture Upload Field -->
         <div class="relative w-1/3 md:w-1/3 lg:w-1/4 mb-4">
             <input type="file" name="profile_picture" id="profile_picture"
-                   class="block w-full px-4 py-2 border border-inputborder rounded-md
-                   focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white"/>
-            <label for="profile_picture"
-                   class="absolute left-4 font-light top-1 text-darkinputlabel transition-all duration-200 text-base">
-                Profile Picture
-            </label>
+                    class="file:py-2 file:px-4 file:rounded file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-indigo-50 file:text-indigo-700
+                    hover:file:bg-indigo-100"/>
         </div>
     </form>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
+    // Store original values for each editable field
+    const originalValues = {};
+    
     // Select all elements with the class "edit-button"
     const editButtons = document.querySelectorAll(".edit-button");
-
-    editButtons.forEach((button) => {
-      button.addEventListener("click", function (e) {
-        e.preventDefault();
-        
-        // Get the parent container for the current editable item
-        // (Assuming the structure has each "edit-button" as a sibling within ".edit-item")
-        const editItem = this.closest(".edit-item");
-        if (!editItem) return;
-
-        // Find the icons within this container
+    
+    // Function to toggle edit mode
+    function toggleEditMode(editItem, isEditing) {
+        const input = editItem.querySelector('input');
         const editIcon = editItem.querySelector(".edit-icon");
         const cancelIcon = editItem.querySelector(".cancel-icon");
         const saveIcon = editItem.querySelector(".save-icon");
-
-        // Toggle the visibility for the icons
-        if (editIcon && !editIcon.classList.contains("hidden")) {
-          editIcon.classList.add("hidden");
-          cancelIcon && cancelIcon.classList.remove("hidden");
-          saveIcon && saveIcon.classList.remove("hidden");
+        const fieldName = editItem.dataset.field;
+        
+        if (isEditing) {
+            // Enable editing
+            input.disabled = false;
+            input.focus();
+            
+            // Store original value
+            originalValues[fieldName] = input.value;
+            
+            // Show save/cancel icons
+            editIcon.classList.add("hidden");
+            cancelIcon.classList.remove("hidden");
+            saveIcon.classList.remove("hidden");
         } else {
-          editIcon && editIcon.classList.remove("hidden");
-          cancelIcon && cancelIcon.classList.add("hidden");
-          saveIcon && saveIcon.classList.add("hidden");
+            // Disable editing
+            input.disabled = true;
+            
+            // Hide save/cancel icons
+            editIcon.classList.remove("hidden");
+            cancelIcon.classList.add("hidden");
+            saveIcon.classList.add("hidden");
         }
-      });
+    }
+    
+    // Function to save changes for a specific field
+    function saveChanges(editItem) {
+        const input = editItem.querySelector('input');
+        const fieldName = editItem.dataset.field;
+        const newValue = input.value;
+        
+        // Create FormData with only this field
+        const formData = new FormData();
+        formData.append(fieldName, newValue);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        
+        // Submit the change via AJAX
+        fetch(document.getElementById('profile-form').action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log(`${fieldName} updated successfully.`);
+                
+                // Update the stored original value
+                originalValues[fieldName] = newValue;
+                
+                // Exit edit mode
+                toggleEditMode(editItem, false);
+            } else {
+                console.error(`Error updating ${fieldName}.`);
+                // Could show an error message here
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+    }
+    
+    // Function to cancel editing
+    function cancelEdit(editItem) {
+        const input = editItem.querySelector('input');
+        const fieldName = editItem.dataset.field;
+        
+        // Restore original value
+        input.value = originalValues[fieldName];
+        
+        // Exit edit mode
+        toggleEditMode(editItem, false);
+    }
+    
+    // Set up event handlers for each edit button
+    editButtons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // Get the parent container
+            const editItem = this.closest(".edit-item");
+            if (!editItem) return;
+            
+            const editIcon = editItem.querySelector(".edit-icon");
+            const saveIcon = editItem.querySelector(".save-icon");
+            const cancelIcon = editItem.querySelector(".cancel-icon");
+            
+            // Check if we're entering or exiting edit mode
+            if (!editIcon.classList.contains("hidden")) {
+                // Enter edit mode
+                toggleEditMode(editItem, true);
+            } else if (e.target.closest('.save-icon') || e.target.closest('svg').classList.contains('save-icon')) {
+                // Save changes
+                saveChanges(editItem);
+            } else if (e.target.closest('.cancel-icon') || e.target.closest('svg').classList.contains('cancel-icon')) {
+                // Cancel editing
+                cancelEdit(editItem);
+            }
+        });
     });
-  });
+    
+    // Handle profile picture uploads
     document.getElementById('profile_picture').addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
-            // Create a new FormData instance just for the profile picture.
+            // Create a new FormData instance just for the profile picture
             const formData = new FormData();
             formData.append('profile_picture', this.files[0]);
-            // Add the CSRF token since Django requires it.
             formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-
-            // Here, the action attribute of the form is used as the endpoint.
+            
+            // Submit the profile picture update
             fetch(document.getElementById('profile-form').action, {
                 method: 'POST',
                 body: formData,
@@ -200,7 +285,19 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Profile picture updated successfully.');
-                    // Optionally, you might want to refresh the profile picture display in the UI.
+                    // Refresh profile picture display - get all avatar images and update them
+                    response.json().then(data => {
+                        if (data.profile_picture_url) {
+                            // Update profile images if needed
+                            const avatars = document.querySelectorAll('.avatar-image'); // Add this class to your avatar images
+                            avatars.forEach(avatar => {
+                                avatar.src = data.profile_picture_url;
+                            });
+                        }
+                    }).catch(() => {
+                        // If response isn't JSON, just reload the page
+                        window.location.reload();
+                    });
                 } else {
                     console.error('An error occurred while updating the profile picture.');
                 }
@@ -210,5 +307,6 @@
             });
         }
     });
+});
 </script>
 {% endblock %}
