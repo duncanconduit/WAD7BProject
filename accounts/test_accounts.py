@@ -113,7 +113,7 @@ class test_accounts(TestCase):
         except:
             pass
         
-        self.assertEqual(url, '/accounts/login/', f"{FAILURE_HEADER}Have you created the rango:register URL mapping correctly? It should point to the new register() view, and have a URL of '/rango/register/' Remember the first part of the URL (/rango/) is handled by the project's urls.py module, and the second part (register/) is handled by the Rango app's urls.py module.{FAILURE_FOOTER}")
+        self.assertEqual(url, '/accounts/login/', f"{FAILURE_HEADER}.{FAILURE_FOOTER}")
     
 
     def test_new_registration_view_exists(self):
@@ -127,7 +127,7 @@ class test_accounts(TestCase):
         except:
             pass
         
-        self.assertEqual(url, '/accounts/register/', f"{FAILURE_HEADER}Have you created the rango:register URL mapping correctly? It should point to the new register() view, and have a URL of '/rango/register/' Remember the first part of the URL (/rango/) is handled by the project's urls.py module, and the second part (register/) is handled by the Rango app's urls.py module.{FAILURE_FOOTER}")
+        self.assertEqual(url, '/accounts/register/', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
 class AccountsViewsTest(TestCase):
     def setUp(self):
         self.client = Client()
