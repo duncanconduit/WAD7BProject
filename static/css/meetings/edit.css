@@ -1,0 +1,68 @@
+/* Floating label transitions */
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+  top: 0rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  transform: none;
+}
+
+.floating-input.error {
+  border-color: #e1686e !important;
+}
+
+/* Error message handling */
+.field-error {
+  display: none;
+}
+
+.floating-input.error + .floating-label + .field-error {
+  display: block;
+  border-color: #e1686e !important;
+}
+
+/* Disable active shrink effect when the button is disabled */
+button[type="submit"]:disabled {
+  transform: none !important;
+  transition: none !important;
+  color: #878cf7 !important;
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Datetime-local input styling adjustments */
+input[type="datetime-local"] {
+  min-height: 3.5rem;
+}
+
+/* Handle datetime-local field label positioning */
+input[type="datetime-local"]:not(:placeholder-shown) + .floating-label {
+  top: 0rem;
+  left: 1rem;
+  font-size: 0.75rem;
+}
+
+/* Add a subtle hover effect to the invitee cards */
+.invitee-card {
+  transition: all 0.2s ease;
+}
+
+.invitee-card:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark .invitee-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Fade-in animation for new invite fields */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.invite-input-group {
+  animation: fadeIn 0.3s ease;
+}

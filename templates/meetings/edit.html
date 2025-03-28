@@ -1,27 +1,185 @@
 {% extends 'base.html' %}
-{% block title_block %}Edit Meeting{% endblock %}
+{% load static %}
+{% block title_block %}&#183; Edit Meeting{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/meetings/edit.css' %}" />
+<script src="{% static 'js/meetings/edit.js' %}"></script>
+{% endblock %}
 {% block body_block %}
-<h1>Edit Meeting</h1>
-<form method="post" action="{% url 'meetings:edit' meeting.id %}">
-    {% csrf_token %}
-    <label for="description">Description:</label>
-    <input type="text" id="description" name="description" value="{{ meeting.description }}" required>
-
-    <label for="start_time">Start Time:</label>
-    <input type="datetime-local" id="start_time" name="start_time" value="{{ meeting.start_time|date:'Y-m-d\TH:i' }}" required>
-
-    <label for="end_time">End Time:</label>
-    <input type="datetime-local" id="end_time" name="end_time" value="{{ meeting.end_time|date:'Y-m-d\TH:i' }}" required>
-
-    <label for="place">Place:</label>
-    <select id="place" name="place">
-        {% for place in places %}
-        <option value="{{ place.id }}" {% if place.id == meeting.place.id %}selected{% endif %}>{{ place.name }}</option>
-        {% endfor %}
-    </select>
-
-    <button type="submit">Save Changes</button>
-</form>
-
-<a href="{% url 'meetings:list' %}">Back to Meetings</a>
+<div class="max-w-md w-full mx-auto text-center">
+    <h2 class="text-3xl font-extrabold text-neutral-900 dark:text-white text-center mb-2">
+        Edit Meeting
+    </h2>
+    <h3 class="text-base font-regular text-neutral-700 dark:text-neutral-300 mb-6">
+        Update the details of your meeting.
+    </h3>
+    <div id="error-message" class="hidden mb-4 p-4 rounded-md bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-100 border border-red-200 dark:border-red-400">
+        <p class="text-sm font-medium"></p>
+    </div>
+    <form id="meeting_form" method="post" action="{% url 'meetings:edit_meeting' meeting_id=meeting.meeting_id %}" class="space-y-4 justify-center">
+        {% csrf_token %}
+        
+        <!-- Description Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="text" name="description" id="description" required placeholder=" " value="{{ meeting.description }}"
+                class="floating-input block w-full px-4 py-4 border border-inputborder rounded-md
+                focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+                dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+            <label for="description" 
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Description
+            </label>
+            <label id="description-error-label" 
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+            </label>
+        </div>
+        
+        <!-- Meeting Type Selector -->
+        <div class="relative mx-auto w-5/6">
+            <div class="flex w-full overflow-hidden border border-inputborder rounded-md dark:border-transparent">
+                <!-- In-Person -->
+                <label for="in_person" class="cursor-pointer flex-1 transition-transform duration-200 ease-in-out hover:scale-105">
+                    <input type="radio" name="meeting_type" id="in_person" class="sr-only peer" value="in_person" {% if not meeting.is_virtual %}checked{% endif %}>
+                    <span class="flex items-center justify-center w-full py-3 text-sm bg-white dark:bg-darktextbox peer-checked:bg-brand-primary peer-checked:text-white px-2">
+                        In-Person
+                    </span>
+                </label>
+                <!-- Virtual -->
+                <label for="virtual" class="cursor-pointer flex-1 transition-transform duration-200 ease-in-out hover:scale-105">
+                    <input type="radio" name="meeting_type" id="virtual" class="sr-only peer" value="virtual" {% if meeting.is_virtual %}checked{% endif %}>
+                    <span class="flex items-center justify-center w-full py-3 text-sm bg-white dark:bg-darktextbox peer-checked:bg-brand-primary peer-checked:text-white px-2">
+                        Virtual
+                    </span>
+                </label>
+            </div>
+            <input type="hidden" name="is_virtual" id="is_virtual" value="{% if meeting.is_virtual %}True{% else %}False{% endif %}">
+        </div>
+        
+        <!-- Start Time Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="datetime-local" name="start_time" id="start_time" required placeholder=" " value="{{ meeting.start_time|date:'Y-m-d\TH:i' }}"
+                class="floating-input block w-full px-4 pt-4 pb-1 border border-inputborder rounded-md
+                focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+                dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+            <label for="start_time" 
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                Start Time
+            </label>
+            <label id="start-time-error-label" 
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+            </label>
+        </div>
+        
+        <!-- End Time Field -->
+        <div class="relative mx-auto w-5/6">
+            <input type="datetime-local" name="end_time" id="end_time" required placeholder=" " value="{{ meeting.end_time|date:'Y-m-d\TH:i' }}"
+                class="floating-input block w-full px-4 pt-4 pb-1 border border-inputborder rounded-md
+                focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary
+                dark:border-transparent dark:bg-darktextbox dark:text-white"/>
+            <label for="end_time" 
+                class="floating-label absolute left-4 font-light top-4 text-darkinputlabel transition-all duration-200 text-base">
+                End Time
+            </label>
+            <label id="end-time-error-label" 
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+            </label>
+        </div>
+        
+        <!-- Place Field (Dropdown) - Only shown for in-person meetings -->
+        <div id="place-container" class="relative mx-auto w-5/6 {% if meeting.is_virtual %}hidden{% endif %}">
+            <div>
+                <button type="button"
+                    class="inline-flex w-full justify-between items-center gap-x-1.5 border border-inputborder rounded-md px-3 py-2 text-sm font-semibold text-gray-900 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox shadow-sm"
+                    id="menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
+                    <span id="selected-option" class="dark:text-white font-normal">
+                        {% if meeting.place %}{{ meeting.place.name }}{% else %}<span class="font-light text-darkinputlabel">Select Meeting Place</span>{% endif %}
+                    </span>
+                    <svg
+                        id="arrow-icon"
+                        class="h-5 w-5 text-gray-400 transform transition-transform duration-200 rotation-0"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path fill-rule="evenodd"
+                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="dropdown-menu"
+                class="absolute w-full left-0 z-10 mt-2 origin-top-right rounded-md bg-white dark:bg-darktextbox shadow-lg ring-1 ring-black/5 border border-inputborder dark:border-transparent hidden"
+                role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                <div class="py-1" role="none">
+                    {% for place in places %}
+                    <a href="#"
+                        class="block rounded-md px-4 py-2 text-sm text-left dark:text-darkinputlabel hover:outline-none hover:ring-1 hover:ring-brand-light"
+                        role="menuitem"
+                        onclick="selectPlace('{{ place.place_id }}', '{{ place.name }}'); return false;">
+                        {{ place.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <input type="hidden" name="place" id="place" value="{% if meeting.place %}{{ meeting.place.id }}{% endif %}">
+            <label id="place-error-label" 
+                class="field-error absolute left-4 font-light bottom-1 text-red-500 transition-all duration-200 text-xs hidden">
+                Please select a meeting place.
+            </label>
+        </div>
+        
+        <!-- Invites Section -->
+        <div class="relative mx-auto w-5/6">
+            <h4 class="text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Invitees</h4>
+            <div class="mb-4 text-left text-sm">
+                {% if invitations %}
+                    {% for invitation in invitations %}
+                    <div class="mb-2 flex items-center justify-between border border-inputborder rounded-md dark:border-transparent px-3 py-2 dark:bg-darktextbox">
+                        <span class="dark:text-white">{{ invitation.user.email }}</span>
+                        <button type="button" class="remove-invite text-gray-400 hover:text-red-500" data-invitation-id="{{ invitation.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 011.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="italic text-gray-500 dark:text-gray-400">No invitees yet.</p>
+                {% endif %}
+            </div>
+            
+            <h4 class="text-left text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Add New Invitees</h4>
+            <div id="invites-container">
+                <div class="invite-input-group mb-2 flex items-center">
+                    <input type="email" name="invitees" 
+                        class="invite-input flex-1 px-3 py-2 border border-inputborder rounded-md focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary dark:border-transparent dark:bg-darktextbox dark:text-white text-sm" 
+                        placeholder="Enter email address">
+                </div>
+            </div>
+            <div class="flex justify-between">
+                <button type="button" id="add-invite" 
+                    class="text-sm text-brand-primary dark:text-brand-light font-medium flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add another
+                </button>
+                <div id="invite-error" class="text-xs text-red-500 hidden"></div>
+            </div>
+            <input type="hidden" name="remove_invitations" id="remove_invitations" value="">
+        </div>
+        
+        <div class="flex w-full gap-5 justify-center">
+            <a href="{% url 'meetings:view_meeting' meeting_id=meeting.meeting_id %}" 
+               class="py-3 px-6 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-transform transform duration-300 hover:scale-105 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
+                Cancel
+            </a>
+            <button type="submit"
+                class="py-3 px-8 rounded-md shadow-brand-glow text-sm font-medium text-white bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-transform transform duration-300 hover:scale-105">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock %}

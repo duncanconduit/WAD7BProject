@@ -63,12 +63,18 @@ def get_meetings(request):
 @login_required
 def view_meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
+    invitations = Invitation.objects.filter(meeting=meeting)
     
 
     if request.user != meeting.organiser and not meeting.invitations.filter(user=request.user).exists():
         raise Http404("Meeting not found")
+    
+    context = {
+        'meeting': meeting,
+        'invitations': invitations,
+    }
 
-    return render(request, 'meetings/view.html', {'meeting': meeting})
+    return render(request, 'meetings/view.html', context)
 
 @login_required
 def create_meeting(request):
@@ -168,6 +174,8 @@ def create_meeting(request):
 @login_required
 def edit_meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
+    invatations = Invitation.objects.filter(meeting=meeting)
+    places = Place.objects.all()
     if request.user != meeting.organiser:
         raise Http404("You do not have permission to edit this meeting.")
     
@@ -179,6 +187,12 @@ def edit_meeting(request, meeting_id):
         meeting.place = Place.objects.get(pk=place_id) if place_id else None
         meeting.save()
 
-        return redirect('view',meeting_id=meeting.pk)
-    else:
-        return render(request, 'meetings/edit.html', {'meeting': meeting})
+        return redirect('meetings:view_meeting', meeting_id=meeting.pk)
+    
+    context = {
+        'meeting': meeting,
+        'places': places,
+        'invitations': invatations,
+    }
+    
+    return render(request, 'meetings/edit.html', context)

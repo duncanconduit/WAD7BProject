@@ -1,6 +1,6 @@
 {% load dashboard_extras %}
 <div
-  class="w-full bg-white dark:bg-gray-900 rounded-xl border border-gray-300 dark:border-transparent p-4 meeting"
+  class="w-full bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-700 p-4 meeting transition-shadow duration-200 hover:shadow-md"
   data-start="{{ meeting.start_time|to_timestamp }}"
   data-end="{{ meeting.end_time|to_timestamp }}"
 >
@@ -11,7 +11,7 @@
         xmlns="http://www.w3.org/2000/svg" fill="none"
         viewBox="0 0 24 24" stroke-width="1.5"
         stroke="currentColor"
-        class="size-6 text-brand-primary"
+        class="size-6 text-brand-primary dark:text-brand-light"
       >
         <path
           stroke-linecap="round" stroke-linejoin="round"
@@ -20,7 +20,7 @@
       </svg>
       <p
         class="text-base font-medium text-light_secondary_action
-               dark:text-dark_secondary_action time-info"
+               dark:text-gray-300 time-info"
       >
         Loading...
       </p>
@@ -29,7 +29,7 @@
       <a
         href="{% url 'meetings:view_meeting' meeting_id=meeting.meeting_id %}"
         class="flex items-center justify-center rounded-full px-2 py-1
-               text-sm font-semibold text-brand-primary hover:text-purple-600"
+               text-sm font-semibold text-brand-primary dark:text-brand-light hover:text-purple-600 dark:hover:text-brand-light/90 transition-colors"
       >
         View
       </a>
@@ -51,8 +51,6 @@
   </div>
 
   <!-- Bottom row: Invitation controls/status + location -->
-<!-- flex-wrap ensures that if there's not enough horizontal space in the container,
-     the items wrap to the next line, *independent* of screen size. -->
 <div class="mt-3 flex flex-wrap items-center gap-2">
 
     <!-- Radio form or status message -->
@@ -68,7 +66,7 @@
             <input type="hidden" name="invitation_id" value="{{ invite.id }}">
       
             <!-- Radio buttons with fixed max width -->
-            <div class="flex w-full overflow-hidden border border-gray-200 rounded-lg">
+            <div class="flex w-full overflow-hidden border border-gray-200 dark:border-gray-600 rounded-lg">
               
               <!-- Accepted -->
               <label
@@ -86,8 +84,8 @@
                 >
                 <span
                   class="flex items-center justify-center w-full py-2 text-sm
-                         bg-white peer-checked:bg-green-200
-                         peer-checked:text-green-700 px-2"
+                         bg-white dark:bg-gray-700 peer-checked:bg-green-200 dark:peer-checked:bg-green-800
+                         peer-checked:text-green-700 dark:peer-checked:text-green-200 px-2"
                 >
                   Accepted
                 </span>
@@ -109,8 +107,8 @@
                 >
                 <span
                   class="flex items-center justify-center w-full py-2 text-sm
-                         bg-white peer-checked:bg-yellow-200
-                         peer-checked:text-yellow-700 px-2"
+                         bg-white dark:bg-gray-700 peer-checked:bg-yellow-200 dark:peer-checked:bg-yellow-800
+                         peer-checked:text-yellow-700 dark:peer-checked:text-yellow-200 px-2"
                 >
                   Maybe
                 </span>
@@ -132,8 +130,8 @@
                 >
                 <span
                   class="flex items-center justify-center w-full py-2 text-sm
-                         bg-white peer-checked:bg-red-200
-                         peer-checked:text-red-700 px-2"
+                         bg-white dark:bg-gray-700 peer-checked:bg-red-200 dark:peer-checked:bg-red-800
+                         peer-checked:text-red-700 dark:peer-checked:text-red-200 px-2"
                 >
                   Declined
                 </span>
@@ -142,29 +140,28 @@
             </div>
           </form>
         {% elif meeting.organiser != user and invite.status == True %}
-          <p class="text-sm font-medium text-light_secondary_action dark:text-dark_secondary_action">
+          <p class="text-sm font-medium text-light_secondary_action dark:text-gray-300">
             You're Attending
           </p>
         {% else %}
-          <p class="text-sm font-medium text-light_secondary_action dark:text-dark_secondary_action">
+          <p class="text-sm font-medium text-light_secondary_action dark:text-gray-300">
             You're Organising
           </p>
         {% endif %}
       </div>
   
     <!-- Location info gets its own flex item (flex-auto) -->
-    <!-- If the container is wide, it sits on the same row; if not, it wraps below. -->
     <div class="flex-auto flex items-center gap-1">
       {% if meeting.is_virtual %}
         <a 
           href="{{ meeting.zoom_meeting.url }}"
-          class="flex-auto flex items-center gap-1"
+          class="flex-auto flex items-center gap-1 transition-colors hover:text-brand-primary dark:hover:text-brand-light"
           aria-label="Join virtual meeting via Zoom">
           
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" viewBox="0 0 48 48" 
-            class="h-5 w-5 text-gray-500" 
+            class="h-5 w-5 text-gray-500 dark:text-gray-400" 
             role="img" 
             aria-labelledby="zoomIconTitle">
             <title id="zoomIconTitle">Zoom Meeting Icon</title>
@@ -173,7 +170,7 @@
             <polygon fill="#fff" points="37,31 31,27 31,21 37,17"></polygon>
           </svg>
           <p class="text-sm text-gray-600 dark:text-gray-400 truncate flex items-center gap-1">
-            Meeting Link <span class="font-medium text-[#4a8af7] inline-block rounded-md bg-gray-200 px-2 py-0.5">/{{ meeting.zoom_meeting.id }}</span>
+            Meeting Link <span class="font-medium text-[#4a8af7] dark:text-[#5f99ff] inline-block rounded-md bg-gray-200 dark:bg-gray-700 px-2 py-0.5">/{{ meeting.zoom_meeting.id }}</span>
           </p>
         </a>
       {% else %}
@@ -184,7 +181,7 @@
             viewBox="0 0 24 24" 
             stroke-width="1.5" 
             stroke="currentColor" 
-            class="h-5 w-5 text-gray-500" 
+            class="h-5 w-5 text-gray-500 dark:text-gray-400" 
             role="img" 
             aria-labelledby="locationIconTitle">
             <title id="locationIconTitle">Location Icon</title>
