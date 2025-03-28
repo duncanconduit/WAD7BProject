@@ -29,8 +29,7 @@ urlpatterns = [
     path('login/', RedirectView.as_view(url='/accounts/login/', permanent=True)),
     path('logout/', RedirectView.as_view(url='/accounts/logout/', permanent=True)),
     path('about/', views.about, name='about'),
-    path('contact/', views.contact, name='contact'),
-]
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

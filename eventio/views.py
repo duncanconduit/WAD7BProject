@@ -1,8 +1,5 @@
 from django.shortcuts import render
 
-def contact(request):
-    return render(request,'contact.html')
-
 def about(request):
     context_dict = {}
     context_dict['authors'] = [

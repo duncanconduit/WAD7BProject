@@ -60,9 +60,7 @@ async function handleInvitationChange(event) {
 
         if (result.success) {
             if (newStatus === "True") {
-                // moveInvitationToAttending(form);
             } else if (newStatus === "False") {
-                // removeInvitationFromList(form);
             }
         } else {
             console.error("Error updating status:", result.message);
@@ -101,7 +99,6 @@ function formatEventTime(unixStart, unixEnd) {
     } else if (eventDay.getTime() === tomorrow.getTime()) {
         dateStr = "Tomorrow";
     } else {
-        // Calculate the next occurrence of the event's weekday
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const eventDayOfWeek = startDate.getDay();
         const todayDayOfWeek = today.getDay();
@@ -111,10 +108,8 @@ function formatEventTime(unixStart, unixEnd) {
         nextOccurrence.setDate(today.getDate() + (daysToNext === 0 ? 7 : daysToNext));
         
         if (eventDay.getTime() === nextOccurrence.getTime()) {
-            // This is the next occurrence of this weekday
             dateStr = days[eventDayOfWeek]
         } else {
-            // Regular date format
             const dayAbbrev = days[eventDayOfWeek].substring(0, 3);
             const dateNumber = startDate.getDate();
             const monthAbbrev = startDate.toLocaleString('en-GB', { month: 'short', timeZone: 'Europe/London' });
