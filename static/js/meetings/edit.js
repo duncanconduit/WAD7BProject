@@ -27,13 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
         place: false
     };
     
-    // Since it's an edit form, we consider fields with values as already "touched"
     if (descriptionInput.value) touchedFields.description = true;
     if (startTimeInput.value) touchedFields.start_time = true;
     if (endTimeInput.value) touchedFields.end_time = true;
     if (placeInput.value) touchedFields.place = true;
     
-    // Make markAsTouched accessible to outside functions
     window.markAsTouched = function(fieldName) {
         touchedFields[fieldName] = true;
         validateForm();
@@ -215,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     
-    // Add invite functionality
     addInviteButton.addEventListener('click', function() {
         const newInviteGroup = document.createElement('div');
         newInviteGroup.className = 'invite-input-group mb-2 flex items-center';

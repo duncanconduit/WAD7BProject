@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateMeetingTimes() {
-    // Get meeting time elements
     const startTimeEl = document.getElementById('meeting-start-time');
     const endTimeEl = document.getElementById('meeting-end-time');
     const dateEl = document.getElementById('meeting-date');
@@ -22,15 +21,12 @@ function updateMeetingTimes() {
     
     if (isNaN(unixStart) || isNaN(unixEnd)) return;
     
-    // Format the date in a user-friendly way
     const dateStr = formatEventDate(unixStart);
     dateEl.textContent = dateStr;
     
-    // Calculate and display duration
     const duration = calculateDuration(unixStart, unixEnd);
     durationEl.textContent = `Duration: ${duration}`;
     
-    // For upcoming meetings, show a countdown
     const statusBadge = document.getElementById('meeting-status-badge');
     if (statusBadge && statusBadge.dataset.status === 'upcoming') {
         startCountdown(unixStart);
@@ -59,10 +55,8 @@ function formatEventDate(unixTimestamp) {
         nextOccurrence.setDate(today.getDate() + (daysToNext === 0 ? 7 : daysToNext));
         
         if (eventDay.getTime() === nextOccurrence.getTime()) {
-            // This is the next occurrence of this weekday
             dateStr = days[eventDayOfWeek];
         } else {
-            // Regular date format
             const dayAbbrev = days[eventDayOfWeek].substring(0, 3);
             const dateNumber = date.getDate();
             const monthAbbrev = date.toLocaleString('en-GB', { month: 'short', timeZone: 'Europe/London' });
@@ -97,7 +91,6 @@ function calculateDuration(unixStart, unixEnd) {
 }
 
 function initAttendeeInteractions() {
-    // Add hover effects to attendee cards
     const attendeeCards = document.querySelectorAll('.attendee-card');
     attendeeCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
@@ -146,10 +139,8 @@ function startCountdown(unixStart) {
         countdownEl.classList.remove('hidden');
     };
     
-    // Update immediately
     updateCountdown();
     
-    // Then update every minute
     setInterval(updateCountdown, 60000);
 }
 
@@ -163,9 +154,7 @@ function checkMeetingStatus() {
     const unixStart = Number(startTimeEl.dataset.timestamp);
     const unixEnd = Number(endTimeEl.dataset.timestamp);
     
-    // If meeting is over, but page shows it as upcoming or in progress
     if (now > unixEnd && document.getElementById('status-badge-completed') === null) {
-        // Create subtle notification that status might be outdated
         const statusContainer = document.querySelector('.meeting-status');
         if (statusContainer) {
             const notification = document.createElement('div');
@@ -176,7 +165,6 @@ function checkMeetingStatus() {
     }
 }
 
-// Add utility animation classes
 document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.textContent = `

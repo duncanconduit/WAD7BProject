@@ -22,7 +22,6 @@ def get_london_aware_datetime(dt_str):
     dt_aware = london_tz.localize(dt_naive, is_dst=None)
     return dt_aware
 
-# view to display meetings as events for calendar api
 def calendar_view(request):
     today = now().date()
     meetings = Meeting.objects.filter(start_time__gte=today).order_by('start_time')
@@ -45,7 +44,6 @@ def calendar_view(request):
     return render(request, 'meetings/calendar.html', context)
 
 
-# optional additional view to fetch all meetings, if needed for other purposes
 def get_meetings(request):
     meetings = Meeting.objects.all()
     events = [
@@ -174,25 +172,93 @@ def create_meeting(request):
 @login_required
 def edit_meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    invatations = Invitation.objects.filter(meeting=meeting)
+    invitations = Invitation.objects.filter(meeting=meeting)
     places = Place.objects.all()
+    
     if request.user != meeting.organiser:
         raise Http404("You do not have permission to edit this meeting.")
     
     if request.method == 'POST':
-        meeting.description = request.POST.get('description')
-        meeting.start_time = parse_datetime(request.POST.get('start_time'))
-        meeting.end_time = parse_datetime(request.POST.get('end_time'))
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        description = request.POST.get('description')
+        start_time = get_london_aware_datetime(request.POST.get('start_time'))
+        end_time = get_london_aware_datetime(request.POST.get('end_time'))
+        is_virtual = request.POST.get('is_virtual') == 'True'
         place_id = request.POST.get('place')
-        meeting.place = Place.objects.get(pk=place_id) if place_id else None
-        meeting.save()
+        invitees = request.POST.getlist('invitees')
+        remove_invitations = request.POST.get('remove_invitations', '')
+        
+        if not description or not start_time or not end_time:
+            if is_ajax:
+                return JsonResponse({'error': 'All fields are required.'}, status=400)
+            else:
+                messages.error(request, 'All fields are required.')
+                return render(request, 'meetings/edit.html', {'meeting': meeting, 'places': places, 'invitations': invitations})
 
-        return redirect('meetings:view_meeting', meeting_id=meeting.pk)
+        if start_time >= end_time:
+            if is_ajax:
+                return JsonResponse({'error': 'End time must be after start time.'}, status=400)
+            else:
+                messages.error(request, 'End time must be after start time.')
+                return render(request, 'meetings/edit.html', {'meeting': meeting, 'places': places, 'invitations': invitations})
+        
+        if not is_virtual and not place_id:
+            if is_ajax:
+                return JsonResponse({'error': 'Place is required for in-person meetings.'}, status=400)
+            else:
+                messages.error(request, 'Place is required for in-person meetings.')
+                return render(request, 'meetings/edit.html', {'meeting': meeting, 'places': places, 'invitations': invitations})
+
+        place = None
+        if not is_virtual and place_id:
+            try:
+                place = Place.objects.get(pk=place_id)
+            except Place.DoesNotExist:
+                if is_ajax:
+                    return JsonResponse({'error': 'Invalid place selected.'}, status=400)
+                else:
+                    messages.error(request, 'Invalid place selected.')
+                    return render(request, 'meetings/edit.html', {'meeting': meeting, 'places': places, 'invitations': invitations})
+        
+        if invitees and any(e for e in invitees if e.strip() and not User.objects.filter(email=e.strip()).exists()):
+            if is_ajax:
+                return JsonResponse({'error': 'Invalid invitee(s) selected.'}, status=400)
+            else:
+                messages.error(request, 'Invalid invitee(s) selected.')
+                return render(request, 'meetings/edit.html', {'meeting': meeting, 'places': places, 'invitations': invitations})
+        
+        meeting.description = description
+        meeting.start_time = start_time
+        meeting.end_time = end_time
+        meeting.is_virtual = is_virtual
+        meeting.place = place
+        meeting.save()
+        
+        if remove_invitations:
+            invitation_ids = [id.strip() for id in remove_invitations.split(',') if id.strip()]
+            Invitation.objects.filter(id__in=invitation_ids, meeting=meeting).delete()
+        
+        for invitee_email in invitees:
+            if invitee_email.strip():  # Only if email is not empty
+                user = User.objects.filter(email=invitee_email.strip()).first()
+                if user and not Invitation.objects.filter(user=user, meeting=meeting).exists():
+                    Invitation.objects.create(user=user, meeting=meeting)
+        
+        if is_ajax:
+            return JsonResponse({
+                'success': True, 
+                'message': 'Meeting updated successfully.',
+                'redirect': reverse('meetings:view_meeting', args=[meeting.pk])
+            })
+        else:
+            messages.success(request, 'Meeting updated successfully!')
+            return redirect('meetings:view_meeting', meeting_id=meeting.pk)
     
     context = {
         'meeting': meeting,
         'places': places,
-        'invitations': invatations,
+        'invitations': invitations,
     }
     
     return render(request, 'meetings/edit.html', context)
