@@ -259,27 +259,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- User's Response Section (only for invitees) -->
-            {% for invitation in invitations %}
-                {% if invitation.user == user %}
-                <div class="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 p-6">
-                    <h3 class="pl-2 font-medium text-gray-900 dark:text-white mb-3">Your Response</h3>
-                    
-                    <div class="flex space-x-2">
-                        <button class="flex-1 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if invitation.status == 'accepted' %}bg-green-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600{% endif %}"
-                                onclick="updateResponse('{{ invitation.id }}', 'accepted')">
-                            <i class="ti ti-check mr-1"></i> Accept
-                        </button>
-                        
-                        <button class="flex-1 py-2 rounded-md text-sm font-medium transition-all duration-200 {% if invitation.status == 'declined' %}bg-red-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-red-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600{% endif %}"
-                                onclick="updateResponse('{{ invitation.id }}', 'declined')">
-                            <i class="ti ti-x mr-1"></i> Decline
-                        </button>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
         </div>
     </div>
     <div class="mt-8 flex justify-end space-x-4">

@@ -13,14 +13,31 @@ from django.utils.dateparse import parse_datetime
 from meetings.models import Meeting, Place
 from accounts.models import User
 import pytz
+import datetime
 
 def get_london_aware_datetime(dt_str):
-    dt_naive = parse_datetime(dt_str)
-    if dt_naive is None:
-        return None 
-    london_tz = pytz.timezone('Europe/London')
-    dt_aware = london_tz.localize(dt_naive, is_dst=None)
-    return dt_aware
+    """
+    Parse a datetime string to a timezone-aware datetime object in London timezone.
+    Handles both ISO format and HTML5 datetime-local format.
+    """
+    if not dt_str:
+        return None
+    
+    try:
+        dt_naive = parse_datetime(dt_str)
+        
+        if dt_naive is None and 'T' in dt_str:
+            dt_naive = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M')
+            
+        if dt_naive is None:
+            return None
+            
+        london_tz = pytz.timezone('Europe/London')
+        dt_aware = london_tz.localize(dt_naive, is_dst=None)
+        return dt_aware
+        
+    except (ValueError, TypeError):
+        return None
 
 def calendar_view(request):
     today = now().date()
