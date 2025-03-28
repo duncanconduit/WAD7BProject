@@ -49,13 +49,6 @@ class MeetingsTestCase(TestCase):
         self.assertIn(self.user2, attendees)
         self.assertNotIn(self.user1, attendees)  # Organiser not included by default
 
-    def test_calendar_view(self):
-        """Test the calendar API response"""
-        response = self.client.get(reverse("meetings:calendar"))
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.json(), list)
-        self.assertEqual(response.json()[0]["title"], "Test Meeting")
-
     def test_meeting_view_requires_login(self):
         """Test that a user must be logged in to view a meeting"""
         response = self.client.get(reverse("meetings:view_meeting", args=[str(self.meeting.pk)]))

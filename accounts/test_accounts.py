@@ -12,7 +12,7 @@ import templates
 from accounts.models import User, Organisation
 from templates import accounts
 from django.db import models
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.conf import settings
 from django.urls import reverse, resolve
 #from django.contrib.auth.models import User
@@ -58,13 +58,23 @@ class test_accounts(TestCase):
     def test_login_functionality(self):
         
         #Tests the login functionality. A user should be able to log in, and should be redirected to the dashboard.
-        
-        user_object = self.create_user_object()
+        User=get_user_model()
+        self.organisation = Organisation.objects.create(name="Test Organisation")
+        user_object = User.objects.create_user(
+                email="alice@example.com", 
+                first_name="Alice", 
+                last_name="Smith", 
+                organisation=self.organisation
+            )
+        user_object.set_password('testpassword123')
+        user_object.save()
+
+        #user_object = self.create_user_object()
 
         response = self.client.post(reverse('accounts:login'), {'email': 'alice@example.com', 'password': 'testpassword123'})
         response_data = json.loads(response.content)
         try:
-            self.assertEqual(user_object.id, int(self.client.session['_auth_user_id']), f"{FAILURE_HEADER}We attempted to log a user in with an ID of {user_object.id}, but instead logged a user in with an ID of {self.client.session['_auth_user_id']}. Please check your login() view.{FAILURE_FOOTER}")
+            self.assertEqual(str(user_object.id), self.client.session['_auth_user_id'], f"{FAILURE_HEADER}We attempted to log a user in with an ID of {user_object.id}, but instead logged a user in with an ID of {self.client.session['_auth_user_id']}. Please check your login() view.{FAILURE_FOOTER}")
         except KeyError:
             self.assertTrue(False, f"{FAILURE_HEADER}When attempting to log in with your login() view, it didn't seem to log the user in. Please check your login() view implementation, and try again.{FAILURE_FOOTER}")
 
@@ -80,7 +90,7 @@ class test_accounts(TestCase):
         self.client.login(email='alice@example.com', password='testpassword123')
 
         try:
-            self.assertEqual(user_object.id, int(self.client.session['_auth_user_id']), f"{FAILURE_HEADER}We attempted to log a user in with an ID of {user_object.id}, but instead logged a user in with an ID of {self.client.session['_auth_user_id']}. Please check your login() view. This happened when testing logout functionality.{FAILURE_FOOTER}")
+            self.assertEqual(str(user_object.id), self.client.session['_auth_user_id'], f"{FAILURE_HEADER}We attempted to log a user in with an ID of {user_object.id}, but instead logged a user in with an ID of {self.client.session['_auth_user_id']}. Please check your login() view. This happened when testing logout functionality.{FAILURE_FOOTER}")
         except KeyError:
             self.assertTrue(False, f"{FAILURE_HEADER}When attempting to log a user in, it failed. Please check your login() view and try again.{FAILURE_FOOTER}")
         
@@ -118,29 +128,72 @@ class test_accounts(TestCase):
             pass
         
         self.assertEqual(url, '/accounts/register/', f"{FAILURE_HEADER}Have you created the rango:register URL mapping correctly? It should point to the new register() view, and have a URL of '/rango/register/' Remember the first part of the URL (/rango/) is handled by the project's urls.py module, and the second part (register/) is handled by the Rango app's urls.py module.{FAILURE_FOOTER}")
-"""
-class Chapter9RestrictedAccessTests(TestCase):
-    
-    def test_bad_request(self):
-        
-        Tries to access the restricted view when not logged in.
-        This should redirect the user to the login page.
-        
-        response = self.client.get(reverse('dashboard:index'))
-        #response_data = json.loads(response.content)
-        self.assertEqual(response.status_code, 200, f"{FAILURE_HEADER}We {response.status_code} tried to access the restricted view when not logged in. We expected to be redirected, but were not. Check your restricted() view.{FAILURE_FOOTER}")
-        self.assertTrue(response["message"].startswith(reverse('accounts:login')), f"{FAILURE_HEADER}We tried to access the restricted view when not logged in, and were expecting to be redirected to the login view. But we were not! Please check your restricted() view.{FAILURE_FOOTER}")
-       
+class AccountsViewsTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.organisation = Organisation.objects.create(name="Test Org")
+        self.user = User.objects.create_user(
+            email="test@example.com",
+            first_name="Test",
+            last_name="User",
+            organisation=self.organisation
+        )
+        self.user.set_password("password123")  # Ensure password is hashed
+        self.user.save()
 
-    def test_good_request(self):
-        
-        Attempts to access the restricted view when logged in.
-        This should not redirect. We cannot test the content here. Only links in base.html can be checked -- we do this in the exercise tests.
-    
-        
-        user_object = self.create_user_object()
-        self.client.login(email='alice@example.com', password='testpassword123')
+    def test_login_view_get(self):
+        response = self.client.get(reverse('accounts:login'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/login.html')
 
-        response = self.client.get(reverse('dashboard:index'))
-        self.assertTrue(response.status_code, 200)
-"""
+    def test_login_view_post_valid(self):
+        response = self.client.post(reverse('accounts:login'), {
+            'email': 'test@example.com',
+            'password': 'password123'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': True, 'redirect': reverse('dashboard:index')})
+
+    def test_login_view_post_invalid(self):
+        response = self.client.post(reverse('accounts:login'), {
+            'email': 'wrong@example.com',
+            'password': 'wrongpassword'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': False, 'message': 'Invalid email or password.'})
+
+    def test_logout_view(self):
+        self.client.login(email='test@example.com', password='password123')
+        response = self.client.get(reverse('accounts:logout'))
+        self.assertRedirects(response, reverse('dashboard:index'))
+
+    def test_profile_view_get(self):
+        self.client.login(email='test@example.com', password='password123')
+        response = self.client.get(reverse('accounts:profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/profile.html')
+
+    def test_register_view_post_valid(self):
+        response = self.client.post(reverse('accounts:register'), {
+            'email': 'newuser@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123',
+            'first-name': 'New',
+            'last-name': 'User',
+            'organisation': self.organisation.org_id
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': True, 'redirect': reverse('accounts:login')})
+        self.assertTrue(User.objects.filter(email='newuser@example.com').exists())
+
+    def test_register_view_post_invalid(self):
+        response = self.client.post(reverse('accounts:register'), {
+            'email': 'newuser@example.com',
+            'password': 'password123',
+            'confirm_password': 'wrongpassword',
+            'first-name': 'New',
+            'last-name': 'User'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'success': False, 'message': 'Something went wrong. Please try again.'})
+        self.assertFalse(User.objects.filter(email='newuser@example.com').exists())
